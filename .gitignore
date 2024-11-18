@@ -1,0 +1,7 @@
+makefile
+sfml-app
+*.o
+
+cmake-build-debug/
+CMakeLists.txt
+.idea
