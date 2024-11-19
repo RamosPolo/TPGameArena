@@ -17,7 +17,7 @@ Engine::Engine()
 
     // Load the background into the texture
     // Be sure to scale this image to your screen size
-    m_BackgroundTexture.loadFromFile("./assets/image/arena_steamPunk.png");
+    m_BackgroundTexture.loadFromFile("../assets/image/arena_steamPunk.png");
 
     // Associate the sprite with the texture
     m_BackgroundSprite.setTexture(m_BackgroundTexture);
@@ -88,7 +88,7 @@ void Engine::input() {
     if(Mouse::isButtonPressed(Mouse::Left) || Keyboard::isKeyPressed(Keyboard::Space)) {
         // on construit le projectile
         Bullet bul;
-        bul.setPosition(m_Character.getPositionX(), m_Character.getPositionY());
+        bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
         addBullet(bul);
     }
 }
@@ -100,7 +100,7 @@ void Engine::draw()
  
     // Draw the background
     m_Window.draw(m_BackgroundSprite);
-    m_Window.draw(m_Character.getSprite());
+    m_Window.draw(m_Player.getSprite());
     for(auto & bullet : bullets) {
         m_Window.draw(bullet.getSprite());
     }
@@ -111,7 +111,7 @@ void Engine::draw()
 
 void Engine::update(float dtAsSeconds)
 {
-    m_Character.update(dtAsSeconds);
+    m_Player.update(dtAsSeconds);
     for(auto & bullet : bullets) {
         bullet.move(dtAsSeconds);
     }

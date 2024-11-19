@@ -34,6 +34,8 @@ public:
     virtual void stopTop() = 0;
     virtual void moveDown() = 0;
     virtual void stopDown() = 0;
+    virtual float getPositionX();
+    virtual float getPositionY();
 
     // Méthode pour obtenir le sprite de l'entité
     Sprite getSprite();

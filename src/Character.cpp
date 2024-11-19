@@ -21,3 +21,10 @@ Character::Character(float speed) :
 Sprite Character::getSprite() {
     return m_Sprite;
 }
+
+float Character::getPositionX() {
+    return m_Position.x;
+}
+float Character::getPositionY() {
+    return m_Position.y;
+}
