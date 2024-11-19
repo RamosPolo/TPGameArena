@@ -17,7 +17,7 @@ Engine::Engine()
 
     // Load the background into the texture
     // Be sure to scale this image to your screen size
-    m_BackgroundTexture.loadFromFile("../assets/image/arena_steamPunk.png");
+    m_BackgroundTexture.loadFromFile("./assets/image/arena_steamPunk.png");
 
     // Associate the sprite with the texture
     m_BackgroundSprite.setTexture(m_BackgroundTexture);
@@ -44,7 +44,7 @@ void Engine::start()
 }
 
 void Engine::input() {
-    // Handle the player quitting
+    
     Event event;
     while (m_Window.pollEvent(event)) // Gestion des événements
     {
@@ -57,33 +57,33 @@ void Engine::input() {
     // Handle the player moving
     if (Keyboard::isKeyPressed(Keyboard::Q))
     {
-        m_Character.moveLeft();
+        m_Player.moveLeft();
     }
     else
     {
-        m_Character.stopLeft();
+        m_Player.stopLeft();
     }
  
     if (Keyboard::isKeyPressed(Keyboard::D))
     {
-        m_Character.moveRight();
+        m_Player.moveRight();
     }
     else
     {
-        m_Character.stopRight();
+        m_Player.stopRight();
     }
     if(Keyboard::isKeyPressed(Keyboard::Z)) {
-        m_Character.moveTop();
+        m_Player.moveTop();
     }
     else {
-        m_Character.stopTop();
+        m_Player.stopTop();
     }
 
     if(Keyboard::isKeyPressed(Keyboard::S)) {
-        m_Character.moveDown();
+        m_Player.moveDown();
     }
     else {
-        m_Character.stopDown();
+        m_Player.stopDown();
     }
     if(Mouse::isButtonPressed(Mouse::Left) || Keyboard::isKeyPressed(Keyboard::Space)) {
         // on construit le projectile

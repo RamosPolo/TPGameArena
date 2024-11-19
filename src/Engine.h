@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Bullet.h"
-#include "Character.h"
+#include "Player.h"
  
 using namespace sf;
  
@@ -15,12 +15,11 @@ private:
     // Declare a sprite and a Texture for the background
     Sprite m_BackgroundSprite;
     Texture m_BackgroundTexture;
- 
-    // An instance of Character
-    Character m_Character;
+
 
     // listes des bullets
     std::vector<Bullet> bullets;
+    Player m_Player;
  
     // Private functions for internal use only
     void input();
