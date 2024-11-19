@@ -11,7 +11,6 @@ Character::Character(float speed) :
     m_Speed(speed)
 {
     // Charge la texture et associe-la au sprite
-    m_Texture.loadFromFile("./assets/image/Character.png");
     m_Sprite.setTexture(m_Texture);
     m_Position.x = 0;
     m_Position.y = 0;

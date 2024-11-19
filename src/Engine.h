@@ -20,6 +20,10 @@ private:
     // listes des bullets
     std::vector<Bullet> bullets;
     Player m_Player;
+
+    // Gérer le temps des projectiles
+    Clock m_BulletClock;
+    float m_BulletCooldown = 0.5f; // Modifier pour une fréquence de tir plus élever
  
     // Private functions for internal use only
     void input();
