@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "Character.h"
+#include "Player.h"
  
 using namespace sf;
  
@@ -15,7 +15,7 @@ private:
     Texture m_BackgroundTexture;
  
     // An instance of Character
-    Character m_Character;
+    Player m_Player;
  
     // Private functions for internal use only
     void input();
