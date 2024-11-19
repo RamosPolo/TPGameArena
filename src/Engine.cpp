@@ -1,5 +1,7 @@
 #include "Engine.h"
- 
+
+#include "Bullet.h"
+
 Engine::Engine()
 {
     // Get the screen resolution and create an SFML window and View
@@ -83,6 +85,12 @@ void Engine::input() {
     else {
         m_Character.stopDown();
     }
+    if(Mouse::isButtonPressed(Mouse::Left) || Keyboard::isKeyPressed(Keyboard::Space)) {
+        // on construit le projectile
+        Bullet bul;
+        bul.setPosition(m_Character.getPositionX(), m_Character.getPositionY());
+        addBullet(bul);
+    }
 }
 
 void Engine::draw()
@@ -93,6 +101,9 @@ void Engine::draw()
     // Draw the background
     m_Window.draw(m_BackgroundSprite);
     m_Window.draw(m_Character.getSprite());
+    for(auto & bullet : bullets) {
+        m_Window.draw(bullet.getSprite());
+    }
  
     // Show everything we have just drawn
     m_Window.display();
@@ -101,5 +112,12 @@ void Engine::draw()
 void Engine::update(float dtAsSeconds)
 {
     m_Character.update(dtAsSeconds);
+    for(auto & bullet : bullets) {
+        bullet.move(dtAsSeconds);
+    }
+}
+
+void Engine::addBullet(Bullet bullet) {
+    bullets.emplace_back(bullet);
 }
 

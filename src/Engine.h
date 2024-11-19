@@ -1,4 +1,6 @@
 #include <SFML/Graphics.hpp>
+
+#include "Bullet.h"
 #include "Character.h"
  
 using namespace sf;
@@ -16,11 +18,15 @@ private:
  
     // An instance of Character
     Character m_Character;
+
+    // listes des bullets
+    std::vector<Bullet> bullets;
  
     // Private functions for internal use only
     void input();
     void update(float dtAsSeconds);
     void draw();
+    void addBullet(Bullet bullet);
  
 public:
     // The Engine constructor
