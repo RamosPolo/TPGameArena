@@ -4,9 +4,22 @@
 
 #include "Obstacle.h"
 
-Obstacle::Obstacle(float x, float y) {
-    O_Texture.loadFromFile("../assets/image/Obstacle.png");
-    O_sprite.setTextureRect(sf::IntRect(0,0,64,64));
-    O_sprite.setPosition(x,y);
+#include <stdexcept>
+
+Obstacle::Obstacle() {
+    if (!O_Texture.loadFromFile("../assets/image/WallTexture.png")) {
+        throw std::runtime_error("Erreur : Impossible de charger la texture !");
+    }
+    O_sprite.setTextureRect(IntRect(10,10,64,64));
+    O_sprite.setTexture(O_Texture);
     O_sprite.setScale(2,2);
+}
+void Obstacle::setPosition(const float x, const float y) {
+    O_position.x = x;
+    O_position.y = y;
+    O_sprite.setPosition(O_position);
+}
+
+Sprite Obstacle::getSprite() {
+    return O_sprite;
 }

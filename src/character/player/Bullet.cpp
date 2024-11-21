@@ -3,7 +3,6 @@
 
 Bullet::Bullet() {
     // Charger la texture
-    b_Texture.loadFromFile("./assets/image/bullet.png");
     b_Sprite.setTexture(b_Texture);
     b_Sprite.setTextureRect(IntRect(0, 0, b_Texture.getSize().x, b_Texture.getSize().y));
 
