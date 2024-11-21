@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 
-#include "Bullet.h"
-#include "Player.h"
+#include "./character/player/Bullet.h"
+#include "./character/player/Player.h"
  
 using namespace sf;
  

@@ -1,6 +1,10 @@
 #include "Engine.h"
 
-#include "Bullet.h"
+#include "./character/player/Bullet.h"
+
+#ifndef ROOT_PATH
+#define ROOT_PATH "./"
+#endif
 
 Engine::Engine()
 {
@@ -13,11 +17,11 @@ Engine::Engine()
         "Simple Game Engine",
         Style::Fullscreen);
  
-    m_Window.setFramerateLimit(60);
+    m_Window.setFramerateLimit(25);
 
     // Load the background into the texture
     // Be sure to scale this image to your screen size
-    m_BackgroundTexture.loadFromFile("../assets/image/arena_steamPunk.png");
+    m_BackgroundTexture.loadFromFile("assets/image/arena_steamPunk.png");
 
     // Associate the sprite with the texture
     m_BackgroundSprite.setTexture(m_BackgroundTexture);

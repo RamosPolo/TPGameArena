@@ -15,8 +15,11 @@ protected:
     bool m_RightPressed;
     bool m_TopPressed;
     bool m_DownPressed;
-
     float m_Speed;
+    int m_CurrentFrame;
+    bool m_IsFacingRight; 
+    int m_FrameWidth;  
+    int m_FrameHeight;
 
 public:
     // Constructeur de base, utilisé par les classes dérivées
@@ -36,8 +39,10 @@ public:
     virtual void stopDown() = 0;
     virtual float getPositionX();
     virtual float getPositionY();
+    virtual void updateSprite();
 
-    // Méthode pour obtenir le sprite de l'entité
+    std::vector<std::string> m_Frames;  
+
     Sprite getSprite();
 };
 

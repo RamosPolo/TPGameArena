@@ -6,7 +6,7 @@
 
 Bullet::Bullet() {
 
-    b_Texture.loadFromFile("../assets/image/fire-bullet.png");
+    b_Texture.loadFromFile("./assets/image/fire-bullet.png");
     b_Sprite.setTexture(b_Texture);
 }
 
