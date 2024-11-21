@@ -11,7 +11,7 @@ using namespace sf;
 
 
 class Bullet {
-private:
+protected:
     Vector2f b_position;
     Vector2f b_target;
     std::vector<float> angle;
