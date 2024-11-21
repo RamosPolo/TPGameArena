@@ -24,26 +24,27 @@ Player::Player(float speed) : Character(speed) {
     m_Sprite.setPosition(m_Position);
 }
 
-void Player::update(float elapsedTime) {
-    if (m_RightPressed) {
+void Player::update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight) {
+    if (m_RightPressed && m_Position.x + m_Sprite.getGlobalBounds().width < windowWidth) {
         m_Position.x += m_Speed * elapsedTime;
     }
 
-    if (m_LeftPressed) {
+    if (m_LeftPressed && m_Position.x > 0) {
         m_Position.x -= m_Speed * elapsedTime;
     }
 
-    if (m_TopPressed) {
+    if (m_TopPressed && m_Position.y > 0) {
         m_Position.y -= m_Speed * elapsedTime;
     }
 
-    if (m_DownPressed) {
+    if (m_DownPressed && m_Position.y + m_Sprite.getGlobalBounds().height < windowHeight) {
         m_Position.y += m_Speed * elapsedTime;
     }
 
     updateSprite();
     m_Sprite.setPosition(m_Position);
 }
+
 
 void Player::moveLeft() {
     m_LeftPressed = true;

@@ -2,9 +2,6 @@
 
 #include "./character/player/Bullet.h"
 
-#ifndef ROOT_PATH
-#define ROOT_PATH "./"
-#endif
 
 Engine::Engine()
 {

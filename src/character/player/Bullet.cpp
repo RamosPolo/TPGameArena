@@ -1,14 +1,13 @@
-//
-// Created by PC on 19/11/2024.
-//
-
 #include "Bullet.h"
-
 #include <complex>
 
-    b_Texture.loadFromFile("./assets/image/fire-bullet.png");
+Bullet::Bullet() {
+    // Charger la texture
+    b_Texture.loadFromFile("./assets/image/bullet.png");
     b_Sprite.setTexture(b_Texture);
     b_Sprite.setTextureRect(IntRect(0, 0, b_Texture.getSize().x, b_Texture.getSize().y));
+
+    // Initialiser la vitesse
     b_speed = 500;
 }
 
@@ -54,5 +53,3 @@ bool Bullet::isOutOfBounds(unsigned int windowWidth, unsigned int windowHeight) 
     // Vérifier si le projectile est hors des limites de la fenêtre
     return (x < 0 || x > windowWidth || y < 0 || y > windowHeight);
 }
-
-
