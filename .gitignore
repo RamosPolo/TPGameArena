@@ -2,6 +2,7 @@ makefile
 sfml-app
 *.o
 build/
+src/*.o
 
 cmake-build-debug/
 CMakeLists.txt

@@ -26,7 +26,7 @@ public:
     Character(float speed = 400);
 
     // Méthode virtuelle pure qui devra être définie dans les classes dérivées
-    virtual void update(float elapsedTime) = 0;
+    virtual void update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight) = 0;
 
     // Méthodes de contrôle du mouvement (à définir dans les classes dérivées)
     virtual void moveLeft() = 0;

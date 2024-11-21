@@ -20,7 +20,7 @@ public:
     void stopDown() override;
 
     // Implémentation de la méthode update pour le joueur
-    void update(float elapsedTime) override;
+    void update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight) override;
 };
 
 #endif

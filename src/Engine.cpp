@@ -37,7 +37,7 @@ void Engine::start()
     {
         // Restart the clock and save the elapsed time into dt
         Time dt = clock.restart();
- 
+
         // Make a fraction from the delta time
         float dtAsSeconds = dt.asSeconds();
  
@@ -89,11 +89,20 @@ void Engine::input() {
     else {
         m_Player.stopDown();
     }
-    if(Mouse::isButtonPressed(Mouse::Left) || Keyboard::isKeyPressed(Keyboard::Space)) {
-        // on construit le projectile
+    if( (Mouse::isButtonPressed(Mouse::Left)
+        || Keyboard::isKeyPressed(Keyboard::Space))
+        && m_BulletClock.getElapsedTime().asSeconds() >= m_BulletCooldown) {
+
+        // Les projectiles sont géreé ici
         Bullet bul;
         bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
+        float xMouse =  Mouse::getPosition().x;
+        float yMouse =  Mouse::getPosition().y;
+        bul.setTarget(xMouse, yMouse);
         addBullet(bul);
+
+        // Réinitialise le chronomètre pour le tir
+        m_BulletClock.restart();
     }
 }
 
@@ -115,9 +124,23 @@ void Engine::draw()
 
 void Engine::update(float dtAsSeconds)
 {
-    m_Player.update(dtAsSeconds);
-    for(auto & bullet : bullets) {
-        bullet.move(dtAsSeconds);
+    unsigned int windowWidth = m_Window.getSize().x;
+    unsigned int windowHeight = m_Window.getSize().y;
+
+    m_Player.update(dtAsSeconds, windowWidth, windowHeight);
+
+    // Mise à jour des projectiles
+    auto it = bullets.begin();
+    while (it != bullets.end()) {
+        // on bouge le projectile
+        it->move(dtAsSeconds);
+
+        // Vérifiez si le projectile est hors de l'écran
+        if (it->isOutOfBounds(windowWidth, windowHeight)) {
+            it = bullets.erase(it); // Supprime le projectile
+            } else {
+                ++it;
+            }
     }
 }
 
