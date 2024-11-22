@@ -1,13 +1,13 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef MONSTER_H
+#define MONSTER_H
 
 #include "../Character.h"
 
-class Player : public Character {
+class Monster : public Character {
 
 public:
     // Constructeur qui passe la vitesse au constructeur de Character
-    Player(float speed = 400);
+    Monster(float speed = 400);
 
     // Implémentation des méthodes de mouvement spécifiques au joueur
     void moveLeft() override;
@@ -19,7 +19,7 @@ public:
     void moveDown() override;
     void stopDown() override;
     void updateSprite() override;
-
+ 
     // Implémentation de la méthode update pour le joueur
     void update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight) override;
 };

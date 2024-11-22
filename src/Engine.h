@@ -2,6 +2,8 @@
 
 #include "./character/player/Bullet.h"
 #include "./character/player/Player.h"
+#include "./character/monster/Monster.h"
+
  
 using namespace sf;
  
@@ -19,7 +21,10 @@ private:
 
     // listes des bullets
     std::vector<Bullet> bullets;
+
     Player m_Player;
+    Monster m_Golem;
+
 
     // Gérer le temps des projectiles
     Clock m_BulletClock;

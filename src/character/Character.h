@@ -39,7 +39,7 @@ public:
     virtual void stopDown() = 0;
     virtual float getPositionX();
     virtual float getPositionY();
-    virtual void updateSprite();
+    virtual void updateSprite() = 0;
 
     std::vector<std::string> m_Frames;  
 

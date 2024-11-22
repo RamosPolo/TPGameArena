@@ -86,6 +86,7 @@ void Engine::input() {
     else {
         m_Player.stopDown();
     }
+
     if( (Mouse::isButtonPressed(Mouse::Left)
         || Keyboard::isKeyPressed(Keyboard::Space))
         && m_BulletClock.getElapsedTime().asSeconds() >= m_BulletCooldown) {
@@ -110,7 +111,10 @@ void Engine::draw()
  
     // Draw the background
     m_Window.draw(m_BackgroundSprite);
+
     m_Window.draw(m_Player.getSprite());
+    m_Window.draw(m_Golem.getSprite());
+
     for(auto & bullet : bullets) {
         m_Window.draw(bullet.getSprite());
     }
@@ -125,6 +129,8 @@ void Engine::update(float dtAsSeconds)
     unsigned int windowHeight = m_Window.getSize().y;
 
     m_Player.update(dtAsSeconds, windowWidth, windowHeight);
+    m_Golem.update(dtAsSeconds, windowWidth, windowHeight);
+
 
     // Mise à jour des projectiles
     auto it = bullets.begin();

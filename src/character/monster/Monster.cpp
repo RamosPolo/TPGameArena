@@ -1,17 +1,16 @@
-#include "Player.h"
 #include <vector>
 #include <iostream>
-#include "Player.h"
+#include "Monster.h"
 
-Player::Player(float speed) : Character(speed) {
-    if (!m_Texture.loadFromFile("./assets/image/Wraith/Walking.png")) {
+Monster::Monster(float speed) : Character(speed) {
+    if (!m_Texture.loadFromFile("./assets/image/Golem/Walking.png")) {
         // Gérer l'erreur si le fichier n'est pas trouvé
         std::cerr << "Erreur: Impossible de charger le sprite sheet !" << std::endl;
     }
 
     // Définir la taille d'une frame (selon ton sprite sheet)
-    m_FrameWidth = 520;
-    m_FrameHeight = 420;
+    m_FrameWidth = 900;
+    m_FrameHeight = 900;
 
     // Définir le sprite avec la première frame (décalée de 10px dans le sprite sheet)
     m_Sprite.setTexture(m_Texture);
@@ -24,7 +23,7 @@ Player::Player(float speed) : Character(speed) {
     m_Sprite.setPosition(m_Position);
 }
 
-void Player::update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight) {
+void Monster::update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight) {
     if (m_RightPressed && m_Position.x + m_Sprite.getGlobalBounds().width < windowWidth) {
         m_Position.x += m_Speed * elapsedTime;
     }
@@ -46,52 +45,51 @@ void Player::update(float elapsedTime, unsigned int windowWidth, unsigned int wi
 }
 
 
-void Player::moveLeft() {
+void Monster::moveLeft() {
     m_LeftPressed = true;
     updateSprite();  
 }
 
-void Player::moveRight() {
+void Monster::moveRight() {
     m_RightPressed = true;
     updateSprite();  
 }
 
 
 
-void Player::stopLeft() {
+void Monster::stopLeft() {
     m_LeftPressed = false;
     updateSprite();  
 }
 
-void Player::stopRight() {
+void Monster::stopRight() {
     m_RightPressed = false;
     updateSprite();  
 }
 
-void Player::moveTop() {
+void Monster::moveTop() {
     m_TopPressed = true;
     updateSprite();
 }
 
-void Player::stopTop() {
+void Monster::stopTop() {
     m_TopPressed = false;
     updateSprite();  
 }
 
-void Player::moveDown() {
+void Monster::moveDown() {
     m_DownPressed = true;
     updateSprite();  
 }
 
-void Player::stopDown() {
+void Monster::stopDown() {
     m_DownPressed = false;
     updateSprite();  
 }
 
-
-void Player::updateSprite() {
+void Monster::updateSprite() {
     if (m_RightPressed || m_LeftPressed || m_TopPressed || m_DownPressed) {
-        m_CurrentFrame = (m_CurrentFrame + 1) % 12; // 12 frames au total (3 lignes x 4 colonnes)
+        m_CurrentFrame = (m_CurrentFrame + 1) % 24; // 12 frames au total (3 lignes x 4 colonnes)
 
         // Calculer la position de la frame dans le sprite sheet
         int column = m_CurrentFrame % 4; // 4 colonnes
