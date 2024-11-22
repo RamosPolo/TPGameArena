@@ -16,7 +16,9 @@ class Obstacle {
     Vector2f O_position;
 
 public:
-    Obstacle(float x, float y);
+    Obstacle();
+    void setPosition(float x, float y);
+    Sprite getSprite();
 };
 
 

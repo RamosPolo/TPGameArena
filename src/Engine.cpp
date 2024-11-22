@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 #include "./character/player/Bullet.h"
+#include "Obstacles/Obstacle.h"
 
 
 Engine::Engine()
@@ -18,7 +19,7 @@ Engine::Engine()
 
     // Load the background into the texture
     // Be sure to scale this image to your screen size
-    m_BackgroundTexture.loadFromFile("assets/image/arena_steamPunk.png");
+    m_BackgroundTexture.loadFromFile("../assets/image/arena_steamPunk.png");
 
     // Associate the sprite with the texture
     m_BackgroundSprite.setTexture(m_BackgroundTexture);
@@ -118,6 +119,10 @@ void Engine::draw()
     for(auto & bullet : bullets) {
         m_Window.draw(bullet.getSprite());
     }
+
+    Obstacle obstacle;
+    obstacle.setPosition(60,60);
+    m_Window.draw(obstacle.getSprite());
  
     // Show everything we have just drawn
     m_Window.display();
