@@ -3,7 +3,6 @@
 #include "Monster.h"
 
 Monster::Monster(float speed) : Character(speed) {
-    if (!m_Texture.loadFromFile("./assets/image/Golem/Walking.png")) {
         // Gérer l'erreur si le fichier n'est pas trouvé
         std::cerr << "Erreur: Impossible de charger le sprite sheet !" << std::endl;
     }

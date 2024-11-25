@@ -29,6 +29,13 @@ Engine::Engine()
     m_BulletTextureFire.loadFromFile("../assets/image/fireBullet.png");
     m_BulletTextureSnow.loadFromFile("../assets/image/snowBall.png");
 
+    // texture des bonus
+    m_bonusTextureDefault.loadFromFile("../assets/image/defaultRing.png");
+    m_bonusTextureFire.loadFromFile("../assets/image/fireRing.png");
+    m_bonusTextureSnow.loadFromFile("../assets/image/snowRing.png");
+
+    m_bonus = Bonus();
+
 }
  
 void Engine::start()
@@ -98,35 +105,61 @@ void Engine::input() {
         && m_BulletClock.getElapsedTime().asSeconds() >= m_BulletCooldown) {
 
         // Les projectiles sont géreé ici
-        SnowBullet bul;
-        bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
-        float xMouse =  Mouse::getPosition().x;
-        float yMouse =  Mouse::getPosition().y;
-        bul.setTarget(xMouse, yMouse);
-        bul.setTextureBullet(m_BulletTextureSnow);
-        bul.getSprite()->scale(Vector2f(0.2f, 0.2f));
-        addBullet(bul);
+        if(this->m_bonus.getType() == "default") {
+            Bullet bul;
+            bul.setTextureBullet(m_BulletTexture);
+            bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
+            float xMouse =  Mouse::getPosition().x;
+            float yMouse =  Mouse::getPosition().y;
+            bul.setTarget(xMouse, yMouse);
+            addBullet(bul);
 
-        // Réinitialise le chronomètre pour le tir
-        m_BulletClock.restart();
-    }
-    if( (Mouse::isButtonPressed(Mouse::Right)
-        || Keyboard::isKeyPressed(Keyboard::Space))
-        && m_BulletClock.getElapsedTime().asSeconds() >= m_BulletCooldown) {
-
-        // Les projectiles sont géreé ici
-        FireBullet bul;
-        bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
-        float xMouse =  Mouse::getPosition().x;
-        float yMouse =  Mouse::getPosition().y;
-        bul.setTarget(xMouse, yMouse);
-        bul.setTextureBullet(m_BulletTextureFire);
-        bul.getSprite()->scale(Vector2f(0.06f, 0.06f));
-        addBullet(bul);
-
-        // Réinitialise le chronomètre pour le tir
-        m_BulletClock.restart();
+            // Réinitialise le chronomètre pour le tir
+            m_BulletClock.restart();
         }
+        if(this->m_bonus.getType() == "fire") {
+            FireBullet bul;
+            bul.setTextureBullet(m_BulletTextureFire);
+            bul.getSprite()->scale(Vector2f(0.06f, 0.06f));
+            bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
+            float xMouse =  Mouse::getPosition().x;
+            float yMouse =  Mouse::getPosition().y;
+            bul.setTarget(xMouse, yMouse);
+            addBullet(bul);
+            // Réinitialise le chronomètre pour le tir
+            m_BulletClock.restart();
+        }
+        if(this->m_bonus.getType() == "snow") {
+            SnowBullet bul;
+            bul.setTextureBullet(m_BulletTextureSnow);
+            bul.getSprite()->scale(Vector2f(0.2f, 0.2f));
+            bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
+            float xMouse =  Mouse::getPosition().x;
+            float yMouse =  Mouse::getPosition().y;
+            bul.setTarget(xMouse, yMouse);
+            addBullet(bul);
+
+            // Réinitialise le chronomètre pour le tir
+            m_BulletClock.restart();
+        }
+    }
+
+    if (m_BonusClock.getElapsedTime() >= spawnIntervalBonus) {
+        Bonus b = BonusFactory::createRandomBonus();
+        if(b.getType() == "default") {
+            b.setTextureBonus(m_bonusTextureDefault);
+        }
+        if(b.getType() == "fire") {
+            b.setTextureBonus(m_bonusTextureFire);
+        }
+        if(b.getType() == "snow") {
+            b.setTextureBonus(m_bonusTextureSnow);
+        }
+        b.getSprite()->scale(Vector2f(0.2f, 0.2f));
+        b.setPosition(Vector2f(rand() % m_Window.getSize().x, rand() % m_Window.getSize().y));
+        bonuses.push_back(b);
+        m_BonusClock.restart();
+    }
 }
 
 void Engine::draw()
@@ -148,6 +181,10 @@ void Engine::draw()
     // draw les projectiles
     for(auto & bullet : bullets) {
         m_Window.draw(*bullet.getSprite());
+    }
+
+    for (auto & bonus : bonuses) {
+        m_Window.draw(*bonus.getSprite());
     }
  
     // Show everything we have just drawn

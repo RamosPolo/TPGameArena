@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 
+#include "Bonus/Bonus.h"
+#include "Bonus/BonusFactory.h"
 #include "./character/player/Bullet.h"
 #include "./character/player/Player.h"
 #include "./character/monster/Monster.h"
@@ -26,12 +28,25 @@ private:
     Texture m_BulletTextureFire;
     Texture m_BulletTextureSnow;
 
+    // texture bonus
+    Texture m_bonusTextureFire;
+    Texture m_bonusTextureSnow;
+    Texture m_bonusTextureDefault;
+
     // listes des bullets
     std::vector<Bullet> bullets;
 
-    Player m_Player;
-    Monster m_Golem;
+    // Slot Bonus du joueur
+    Bonus m_bonus;
+    std::vector<Bonus> bonuses;
+    Clock m_BonusClock;
+    Time spawnIntervalBonus = seconds(7.f); // 7 secondes
 
+    // player
+    Player m_Player;
+
+    // les monstres
+    Monster m_Golem;
 
     // les Obstacles
     ObstacleFactory m_ObstacleFactory;
