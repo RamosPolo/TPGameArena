@@ -19,15 +19,30 @@ protected:
     Texture b_Texture;
     float b_speed;
     Vector2f b_direction;
+    int dammage;
 public:
     Bullet();
-    Sprite getSprite();
+
+    Sprite *getSprite();
     void setPosition(float x, float y);
     void move(float elapsedTime);
     void setTarget(float x, float y);
     bool isOutOfBounds(unsigned int windowWidth, unsigned int windowHeight) const;
+    void setTextureBullet(const Texture &t);
 };
 
+// Type boule de feu
+class FireBullet : public Bullet {
+    protected:
+    public:
+        FireBullet();
+};
 
+// Type boule de glace
+class SnowBullet : public Bullet {
+    protected:
+    public:
+        SnowBullet();
+};
 
 #endif //BULLET_H

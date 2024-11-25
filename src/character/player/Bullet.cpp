@@ -2,16 +2,18 @@
 #include <complex>
 
 Bullet::Bullet() {
-    // Charger la texture
-    b_Sprite.setTexture(b_Texture);
-    b_Sprite.setTextureRect(IntRect(0, 0, b_Texture.getSize().x, b_Texture.getSize().y));
-
+    this->dammage = 5;
     // Initialiser la vitesse
-    b_speed = 500;
+    this->b_speed = 500;
 }
 
-Sprite Bullet::getSprite() {
-    return b_Sprite;
+Sprite* Bullet::getSprite() {
+    return &this->b_Sprite;
+}
+
+
+void Bullet::setTextureBullet(const Texture &t) {
+    this->b_Sprite.setTexture(t);
 }
 
 void Bullet::setPosition(float x, float y) {
@@ -52,3 +54,21 @@ bool Bullet::isOutOfBounds(unsigned int windowWidth, unsigned int windowHeight) 
     // Vérifier si le projectile est hors des limites de la fenêtre
     return (x < 0 || x > windowWidth || y < 0 || y > windowHeight);
 }
+
+// FIRE BULLET
+FireBullet::FireBullet(){
+    this->dammage = 10;
+    this->b_Texture.loadFromFile("../assets/image/fireBullet.png");
+    this->b_Sprite.setTexture(b_Texture);
+    // Initialiser la vitesse
+    this->b_speed = 550;
+}
+
+SnowBullet::SnowBullet() {
+    this->dammage = 7;
+    this->b_Texture.loadFromFile("../assets/image/snowBall.png");
+    this->b_Sprite.setTexture(b_Texture);
+    // Initialiser la vitesse
+    this->b_speed = 470;
+}
+

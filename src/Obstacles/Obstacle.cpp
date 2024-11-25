@@ -23,3 +23,9 @@ void Obstacle::setPosition(const float x, const float y) {
 Sprite Obstacle::getSprite() {
     return O_sprite;
 }
+
+void Obstacle::setSize(float l, float h) {
+    O_sprite.setScale(l,h);
+}
+
+

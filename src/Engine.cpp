@@ -15,7 +15,7 @@ Engine::Engine()
         "Simple Game Engine",
         Style::Fullscreen);
  
-    m_Window.setFramerateLimit(25);
+    m_Window.setFramerateLimit(50);
 
     // Load the background into the texture
     // Be sure to scale this image to your screen size
@@ -23,7 +23,12 @@ Engine::Engine()
 
     // Associate the sprite with the texture
     m_BackgroundSprite.setTexture(m_BackgroundTexture);
- 
+
+    // texture des balles
+    m_BulletTexture.loadFromFile("../assets/image/bullet.png");
+    m_BulletTextureFire.loadFromFile("../assets/image/fireBullet.png");
+    m_BulletTextureSnow.loadFromFile("../assets/image/snowBall.png");
+
 }
  
 void Engine::start()
@@ -93,16 +98,35 @@ void Engine::input() {
         && m_BulletClock.getElapsedTime().asSeconds() >= m_BulletCooldown) {
 
         // Les projectiles sont géreé ici
-        Bullet bul;
+        SnowBullet bul;
         bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
         float xMouse =  Mouse::getPosition().x;
         float yMouse =  Mouse::getPosition().y;
         bul.setTarget(xMouse, yMouse);
+        bul.setTextureBullet(m_BulletTextureSnow);
+        bul.getSprite()->scale(Vector2f(0.2f, 0.2f));
         addBullet(bul);
 
         // Réinitialise le chronomètre pour le tir
         m_BulletClock.restart();
     }
+    if( (Mouse::isButtonPressed(Mouse::Right)
+        || Keyboard::isKeyPressed(Keyboard::Space))
+        && m_BulletClock.getElapsedTime().asSeconds() >= m_BulletCooldown) {
+
+        // Les projectiles sont géreé ici
+        FireBullet bul;
+        bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
+        float xMouse =  Mouse::getPosition().x;
+        float yMouse =  Mouse::getPosition().y;
+        bul.setTarget(xMouse, yMouse);
+        bul.setTextureBullet(m_BulletTextureFire);
+        bul.getSprite()->scale(Vector2f(0.06f, 0.06f));
+        addBullet(bul);
+
+        // Réinitialise le chronomètre pour le tir
+        m_BulletClock.restart();
+        }
 }
 
 void Engine::draw()
@@ -113,16 +137,18 @@ void Engine::draw()
     // Draw the background
     m_Window.draw(m_BackgroundSprite);
 
+    // draw le joueur
+
     m_Window.draw(m_Player.getSprite());
     m_Window.draw(m_Golem.getSprite());
 
-    for(auto & bullet : bullets) {
-        m_Window.draw(bullet.getSprite());
-    }
 
-    Obstacle obstacle;
-    obstacle.setPosition(60,60);
-    m_Window.draw(obstacle.getSprite());
+    //m_ObstacleFactory.drawObstacles(m_Window);
+
+    // draw les projectiles
+    for(auto & bullet : bullets) {
+        m_Window.draw(*bullet.getSprite());
+    }
  
     // Show everything we have just drawn
     m_Window.display();

@@ -4,7 +4,10 @@
 #include "./character/player/Player.h"
 #include "./character/monster/Monster.h"
 
- 
+
+#include "Obstacles/Obstacle.h"
+#include "Obstacles/ObstacleFactory.h"
+
 using namespace sf;
  
 class Engine
@@ -18,6 +21,10 @@ private:
     Sprite m_BackgroundSprite;
     Texture m_BackgroundTexture;
 
+    // texture des bullets
+    Texture m_BulletTexture;
+    Texture m_BulletTextureFire;
+    Texture m_BulletTextureSnow;
 
     // listes des bullets
     std::vector<Bullet> bullets;
@@ -25,6 +32,9 @@ private:
     Player m_Player;
     Monster m_Golem;
 
+
+    // les Obstacles
+    ObstacleFactory m_ObstacleFactory;
 
     // Gérer le temps des projectiles
     Clock m_BulletClock;

@@ -19,6 +19,7 @@ public:
     Obstacle();
     void setPosition(float x, float y);
     Sprite getSprite();
+    void setSize(float largeur, float longeur);
 };
 
 
