@@ -7,7 +7,7 @@ class Player : public Character {
 
 public:
     // Constructeur qui passe la vitesse au constructeur de Character
-    Player();
+    Player(float s, int l);
 
     // Implémentation des méthodes de mouvement spécifiques au joueur
     void moveLeft() override;

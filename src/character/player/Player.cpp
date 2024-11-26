@@ -3,8 +3,8 @@
 #include <iostream>
 #include "Player.h"
 
-Player::Player(){
-    if (!m_Texture.loadFromFile("./assets/image/Wraith/Walking.png")) {
+Player::Player(float s, int l): Character(s, l) {
+    if (!m_Texture.loadFromFile("../assets/image/Wraith/Walking.png")) {
         // Gérer l'erreur si le fichier n'est pas trouvé
         std::cerr << "Erreur: Impossible de charger le sprite sheet !" << std::endl;
     }
@@ -16,7 +16,7 @@ Player::Player(){
     // Définir le sprite avec la première frame (décalée de 10px dans le sprite sheet)
     m_Sprite.setTexture(m_Texture);
     m_Sprite.setTextureRect(sf::IntRect(10, 10, m_FrameWidth, m_FrameHeight));
-    m_Sprite.setScale(0.5f, 0.5f); 
+    m_Sprite.setScale(0.5f, 0.5f);
 
     // Positionner le sprite sur la scène
     m_Position.x = 500; // Position initiale en X

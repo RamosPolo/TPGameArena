@@ -7,7 +7,7 @@ class Monster : public Character {
 
 public:
 
-    Monster(float speed = 200, const Texture& texture = getDefaultTexture());
+    Monster(float speed = 200, const Texture& texture = getDefaultTexture(), int l = 3);
 
     // Implémentation des méthodes de mouvement spécifiques au joueur
     void moveLeft() override;

@@ -4,17 +4,16 @@
 #include "Obstacles/Obstacle.h"
 
 
-Engine::Engine()
-{
+Engine::Engine(): m_Player(400, 5) {
     // Get the screen resolution and create an SFML window and View
     Vector2f resolution;
     resolution.x = VideoMode::getDesktopMode().width;
     resolution.y = VideoMode::getDesktopMode().height;
- 
+
     m_Window.create(VideoMode(resolution.x, resolution.y),
-        "Simple Game Engine",
-        Style::Fullscreen);
- 
+                    "Simple Game Engine",
+                    Style::Fullscreen);
+
     m_Window.setFramerateLimit(50);
 
     m_BackgroundTexture.loadFromFile("./assets/image/arena_steamPunk.png");
@@ -42,9 +41,8 @@ Engine::Engine()
         m_CollisionManager.AddObject(monster.getSprite());
         m_Enemies.push_back(monster);
     }
- 
 }
- 
+
 void Engine::start()
 {
     // Timing

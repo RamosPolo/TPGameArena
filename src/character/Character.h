@@ -26,7 +26,7 @@ protected:
 
 public:
     // Constructeur de base, utilisé par les classes dérivées
-    Character(float speed = 400, int life = 5);
+    Character(float speed, int life);
 
     // Méthodes de contrôle du mouvement (à définir dans les classes dérivées)
     virtual void moveLeft() = 0;
