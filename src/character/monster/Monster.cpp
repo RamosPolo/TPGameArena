@@ -10,7 +10,7 @@ Monster::Monster(float speed, const Texture& texture) : Character(speed) {
     std::srand(static_cast<unsigned int>(std::time(0)) + std::rand());
 
     positionnerSurBord();
-        
+
     m_Speed = speed;
 
     // Appliquer la texture au sprite
@@ -157,7 +157,7 @@ void Monster::updateSprite() {
         m_Sprite.setScale(scaleFactor, scaleFactor);
         m_Sprite.setOrigin(0, 0);
     } else if (m_LeftPressed) {
-        m_Sprite.setScale(-scaleFactor, scaleFactor); 
-        m_Sprite.setOrigin(900, 0); 
+        m_Sprite.setScale(-scaleFactor, scaleFactor);
+        m_Sprite.setOrigin(900, 0);
     }
 }

@@ -4,9 +4,11 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include "../GameObject.h"
+
 using namespace sf;
 
-class Character {
+class Character : public GameObject {
 protected:
     Vector2f m_Position;
     Sprite m_Sprite;
@@ -41,9 +43,9 @@ public:
 
     std::vector<std::string> m_Frames;  
 
-    Sprite getSprite();
+    Sprite* getSprite();
 
-    static const Texture& getDefaultTexture(); 
+    static const Texture& getDefaultTexture();
 
 };
 

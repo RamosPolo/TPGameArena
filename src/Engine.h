@@ -9,6 +9,7 @@
 
 #include "Obstacles/Obstacle.h"
 #include "Obstacles/ObstacleFactory.h"
+#include "WorkingFile/CollisionManager.h"
 
 using namespace sf;
  
@@ -37,7 +38,10 @@ private:
     Texture m_EnemiesTexture;
 
 
-    std::vector<Monster> m_Enemies; 
+    std::vector<Monster> m_Enemies;
+
+    // Collisions
+    CollisionManager m_CollisionManager;
 
 
     // listes des bullets

@@ -35,8 +35,11 @@ Engine::Engine()
 
     m_bonus = Bonus();
 
-    for (int i = 0; i < 5; ++i) {  
-        Monster monster(100, m_EnemiesTexture);  
+    m_EnemiesTexture.loadFromFile("../assets/image/Golem/Walking.png");
+
+    for (int i = 0; i < 5; ++i) {
+        Monster monster(100, m_EnemiesTexture);
+        m_CollisionManager.AddObject(monster.getSprite());
         m_Enemies.push_back(monster);
     }
  
@@ -111,6 +114,7 @@ void Engine::input() {
         // Les projectiles sont géreé ici
         if(this->m_bonus.getType() == "default") {
             Bullet bul;
+            m_CollisionManager.AddObject(bul.getSprite());
             bul.setTextureBullet(m_BulletTexture);
             bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
             float xMouse =  Mouse::getPosition().x;
@@ -123,6 +127,7 @@ void Engine::input() {
         }
         if(this->m_bonus.getType() == "fire") {
             FireBullet bul;
+            m_CollisionManager.AddObject(bul.getSprite());
             bul.setTextureBullet(m_BulletTextureFire);
             bul.getSprite()->scale(Vector2f(0.06f, 0.06f));
             bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
@@ -135,6 +140,7 @@ void Engine::input() {
         }
         if(this->m_bonus.getType() == "snow") {
             SnowBullet bul;
+            m_CollisionManager.AddObject(bul.getSprite());
             bul.setTextureBullet(m_BulletTextureSnow);
             bul.getSprite()->scale(Vector2f(0.2f, 0.2f));
             bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
@@ -150,6 +156,7 @@ void Engine::input() {
 
     if (m_BonusClock.getElapsedTime() >= spawnIntervalBonus) {
         Bonus b = BonusFactory::createRandomBonus();
+        m_CollisionManager.AddObject(b.getSprite());
         if(b.getType() == "default") {
             b.setTextureBonus(m_bonusTextureDefault);
         }
@@ -176,10 +183,10 @@ void Engine::draw()
 
     // draw le joueur
 
-    m_Window.draw(m_Player.getSprite());
+    m_Window.draw(*m_Player.getSprite());
 
     for (auto &ennemi : m_Enemies) {
-        m_Window.draw(ennemi.getSprite());    
+        m_Window.draw(*ennemi.getSprite());
     }
 
 
@@ -224,6 +231,10 @@ void Engine::update(float dtAsSeconds)
                 ++it;
             }
     }
+
+    // collisions
+    m_CollisionManager.handleCollisions();
+
 }
 
 void Engine::addBullet(Bullet bullet) {

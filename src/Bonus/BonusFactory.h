@@ -4,8 +4,6 @@
 
 #ifndef BONUSFACTORY_H
 #define BONUSFACTORY_H
-#include <memory>
-#include <vector>
 
 #include "Bonus.h"
 
