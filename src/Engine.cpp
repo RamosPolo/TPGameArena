@@ -155,7 +155,7 @@ void Engine::input() {
     }
 
     if (m_BonusClock.getElapsedTime() >= spawnIntervalBonus) {
-        Bonus b = BonusFactory::createRandomBonus();
+        Bonus b = m_BonusFactory.createRandomBonus();
         m_CollisionManager.AddObject(b.getSprite());
         if(b.getType() == "default") {
             b.setTextureBonus(m_bonusTextureDefault);
