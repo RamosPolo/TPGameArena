@@ -1,18 +1,16 @@
 #include "Character.h"
 
-Character::Character(float speed) : 
-    m_Position(), 
-    m_Sprite(), 
-    m_Texture(), 
-    m_LeftPressed(false), 
-    m_RightPressed(false),
-    m_TopPressed(false), 
-    m_DownPressed(false), 
-    m_Speed(speed),
-    m_IsFacingRight(true)
+Character::Character(float speed, int life) 
 {
+    m_LeftPressed = false;
+    m_RightPressed = false;
+    m_TopPressed = false; 
+    m_DownPressed = false; 
     m_Position.x = 0;
     m_Position.y = 0;
+    m_Speed = speed;
+    m_IsFacingRight = true;
+    m_life = life;
 }
 
 

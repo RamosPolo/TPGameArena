@@ -3,8 +3,8 @@
 #include <iostream>
 #include "Player.h"
 
-Player::Player(float speed) : Character(speed) {
-    if (!m_Texture.loadFromFile("../assets/image/Wraith/Walking.png")) {
+Player::Player(){
+    if (!m_Texture.loadFromFile("./assets/image/Wraith/Walking.png")) {
         // Gérer l'erreur si le fichier n'est pas trouvé
         std::cerr << "Erreur: Impossible de charger le sprite sheet !" << std::endl;
     }

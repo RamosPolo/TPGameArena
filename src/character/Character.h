@@ -22,10 +22,11 @@ protected:
     bool m_IsFacingRight; 
     int m_FrameWidth;  
     int m_FrameHeight;
+    int m_life;
 
 public:
     // Constructeur de base, utilisé par les classes dérivées
-    Character(float speed = 400);
+    Character(float speed = 400, int life = 5);
 
     // Méthodes de contrôle du mouvement (à définir dans les classes dérivées)
     virtual void moveLeft() = 0;
