@@ -9,18 +9,25 @@ public:
     // Constructeur qui passe la vitesse au constructeur de Character
     Player(float s, int l);
 
-    // Implémentation des méthodes de mouvement spécifiques au joueur
-    void moveLeft() override;
-    void moveRight() override;
-    void stopLeft() override;
-    void stopRight() override;
-    void moveTop() override;
-    void stopTop() override;
-    void moveDown() override;
-    void stopDown() override;
-    void updateSprite() override;
-
     void update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight);
+
+    void updateSprite();
+
+    void moveLeft();
+
+    void moveRight();
+
+    void stopLeft();
+
+    void stopRight();
+
+    void moveTop();
+
+    void stopTop();
+
+    void moveDown();
+
+    void stopDown();
 };
 
 #endif

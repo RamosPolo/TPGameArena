@@ -3,11 +3,14 @@
 #include <iostream>
 #include "Player.h"
 
-Player::Player(float s, int l): Character(s, l) {
+Player::Player(float s, int l) {
     if (!m_Texture.loadFromFile("../assets/image/Wraith/Walking.png")) {
         // Gérer l'erreur si le fichier n'est pas trouvé
         std::cerr << "Erreur: Impossible de charger le sprite sheet !" << std::endl;
     }
+
+    m_Speed = s;
+    m_life = l;
 
     // Définir la taille d'une frame (selon ton sprite sheet)
     m_FrameWidth = 520;
@@ -45,50 +48,6 @@ void Player::update(float elapsedTime, unsigned int windowWidth, unsigned int wi
     m_Sprite.setPosition(m_Position);
 }
 
-
-void Player::moveLeft() {
-    m_LeftPressed = true;
-    updateSprite();  
-}
-
-void Player::moveRight() {
-    m_RightPressed = true;
-    updateSprite();  
-}
-
-
-
-void Player::stopLeft() {
-    m_LeftPressed = false;
-    updateSprite();  
-}
-
-void Player::stopRight() {
-    m_RightPressed = false;
-    updateSprite();  
-}
-
-void Player::moveTop() {
-    m_TopPressed = true;
-    updateSprite();
-}
-
-void Player::stopTop() {
-    m_TopPressed = false;
-    updateSprite();  
-}
-
-void Player::moveDown() {
-    m_DownPressed = true;
-    updateSprite();  
-}
-
-void Player::stopDown() {
-    m_DownPressed = false;
-    updateSprite();  
-}
-
-
 void Player::updateSprite() {
     if (m_RightPressed || m_LeftPressed || m_TopPressed || m_DownPressed) {
         m_CurrentFrame = (m_CurrentFrame + 1) % 12; // 12 frames au total (3 lignes x 4 colonnes)
@@ -113,4 +72,44 @@ void Player::updateSprite() {
         m_Sprite.setScale(-0.5f, 0.5f);
         m_Sprite.setOrigin(520, 0); // Ajustement pour l'inversion horizontale
     }
+}
+
+void Player::moveLeft() {
+    m_LeftPressed = true;
+    updateSprite();
+}
+
+void Player::moveRight() {
+    m_RightPressed = true;
+    updateSprite();
+}
+
+void Player::stopLeft() {
+    m_LeftPressed = false;
+    updateSprite();
+}
+
+void Player::stopRight() {
+    m_RightPressed = false;
+    updateSprite();
+}
+
+void Player::moveTop() {
+    m_TopPressed = true;
+    updateSprite();
+}
+
+void Player::stopTop() {
+    m_TopPressed = false;
+    updateSprite();
+}
+
+void Player::moveDown() {
+    m_DownPressed = true;
+    updateSprite();
+}
+
+void Player::stopDown() {
+    m_DownPressed = false;
+    updateSprite();
 }

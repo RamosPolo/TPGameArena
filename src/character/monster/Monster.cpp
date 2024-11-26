@@ -5,7 +5,7 @@
 #include <cstdlib> 
 #include <ctime> 
 
-Monster::Monster(float speed, const Texture& texture, int l) : Character(speed,l) {
+Monster::Monster(float speed, const Texture& texture, int l) {
 
     std::srand(static_cast<unsigned int>(std::time(0)) + std::rand());
 

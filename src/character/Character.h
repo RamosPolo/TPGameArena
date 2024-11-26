@@ -26,28 +26,37 @@ protected:
 
 public:
     // Constructeur de base, utilisé par les classes dérivées
-    Character(float speed, int life);
+    Character();
 
     // Méthodes de contrôle du mouvement (à définir dans les classes dérivées)
-    virtual void moveLeft() = 0;
-    virtual void moveRight() = 0;
-    virtual void stopLeft() = 0;
-    virtual void stopRight() = 0;
-    virtual void moveTop() = 0;
-    virtual void stopTop() = 0;
-    virtual void moveDown() = 0;
-    virtual void stopDown() = 0;
-    virtual float getPositionX();
-    virtual float getPositionY();
-    virtual void updateSprite() = 0;
-    virtual void setTexture(const Texture& t);
 
     std::vector<std::string> m_Frames;  
 
     Sprite* getSprite();
 
+    float getPositionX();
+
+    float getPositionY();
+
+    void setTexture(const Texture &texture);
+
     static const Texture& getDefaultTexture();
 
+    void moveLeft();
+
+    void moveRight();
+
+    void stopLeft();
+
+    void stopRight();
+
+    void moveTop();
+
+    void stopTop();
+
+    void moveDown();
+
+    void stopDown();
 };
 
 #endif
