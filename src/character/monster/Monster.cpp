@@ -5,29 +5,24 @@
 #include <cstdlib> 
 #include <ctime> 
 
-Monster::Monster(float speed) : Character(speed) {
-        // Gérer l'erreur si le fichier n'est pas trouvé
-        std::cerr << "Erreur: Impossible de charger le sprite sheet !" << std::endl;
-    }
+Monster::Monster(float speed, const Texture& texture) : Character(speed) {
 
-    m_Speed = 100;
+    std::srand(static_cast<unsigned int>(std::time(0)) + std::rand());
 
+    positionnerSurBord();
+        
+    m_Speed = speed;
+
+    // Appliquer la texture au sprite
+    this->m_Sprite.setTexture(texture);
+
+    // Configurer le sprite (portion de la texture, échelle, etc.)
     m_FrameWidth = 900;
     m_FrameHeight = 900;
-
-    float scaleFactor = 1.0f / 3.0f;
-
-    // Définir le sprite avec la première frame (décalée de 10px dans le sprite sheet)
-    m_Sprite.setTexture(m_Texture);
-    m_Sprite.setTextureRect(sf::IntRect(10, 10, m_FrameWidth, m_FrameHeight));
-    m_Sprite.setScale(scaleFactor, scaleFactor); // Orientation normale
+    m_Sprite.setTextureRect(sf::IntRect(0, 0, m_FrameWidth, m_FrameHeight));
 
 
-    // Initialiser le générateur de nombres aléatoires
-    std::srand(static_cast<unsigned int>(std::time(0)) + std::rand());  // Modification pour garantir des valeurs différentes
-
-    // Positionner le monstre aléatoirement sur un des bords
-    positionnerSurBord();
+    // Placer le sprite à la position définie
     m_Sprite.setPosition(m_Position);
 }
 
@@ -140,7 +135,7 @@ void Monster::stopDown() {
 
 void Monster::updateSprite() {
     // Réduction de la taille du sprite (divisé par 3)
-    float scaleFactor = 1.0f / 3.0f;
+    float scaleFactor = 0.3f;
 
     // Définir la frame à afficher (ici, testons la frame avec l'indice 3)
     m_CurrentFrame = (m_CurrentFrame + 1) % 23; // On boucle entre 23 frames valides
@@ -156,16 +151,13 @@ void Monster::updateSprite() {
     // Définir la région de la frame dans le sprite sheet
     m_Sprite.setTextureRect(sf::IntRect(x, y, 930, 930)); // Sélectionner la portion correcte de la texture
 
+
     // Gérer l'orientation du sprite
-    if (m_RightPressed && !m_IsFacingRight) {
-        m_IsFacingRight = true;
-        m_Sprite.setScale(scaleFactor, scaleFactor); // Orientation normale
+    if (m_RightPressed) {
+        m_Sprite.setScale(scaleFactor, scaleFactor);
         m_Sprite.setOrigin(0, 0);
-    } else if (m_LeftPressed && m_IsFacingRight) {
-        m_IsFacingRight = false;
-        m_Sprite.setScale(-scaleFactor, scaleFactor); // Miroir horizontal
-        m_Sprite.setOrigin(900, 0); // Ajustement pour l'inversion horizontale
+    } else if (m_LeftPressed) {
+        m_Sprite.setScale(-scaleFactor, scaleFactor); 
+        m_Sprite.setOrigin(900, 0); 
     }
 }
-
-

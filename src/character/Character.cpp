@@ -2,8 +2,7 @@
 
 Character::Character(float speed) : 
     m_Position(), 
-    m_Sprite(), 
-    m_Texture(), 
+    m_Sprite(),  
     m_LeftPressed(false), 
     m_RightPressed(false),
     m_TopPressed(false), 
@@ -15,7 +14,6 @@ Character::Character(float speed) :
     m_Position.y = 0;
 }
 
-
 Sprite Character::getSprite() {
     return m_Sprite;
 }
@@ -23,6 +21,24 @@ Sprite Character::getSprite() {
 float Character::getPositionX() {
     return m_Position.x;
 }
+
 float Character::getPositionY() {
     return m_Position.y;
+}
+
+void Character::setTexture(const Texture& texture) {
+    m_Texture = texture;
+    m_Sprite.setTexture(m_Texture);
+}
+
+const Texture& Character::getDefaultTexture() {
+    static Texture defaultTexture;
+    static bool isLoaded = false;
+    if (!isLoaded) {
+        if (!defaultTexture.loadFromFile("./assets/image/default.png")) {
+            std::cerr << "Erreur : Impossible de charger la texture par défaut." << std::endl;
+        }
+        isLoaded = true;
+    }
+    return defaultTexture;
 }

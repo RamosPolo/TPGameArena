@@ -37,10 +37,14 @@ public:
     virtual float getPositionX();
     virtual float getPositionY();
     virtual void updateSprite() = 0;
+    virtual void setTexture(const Texture& t);
 
     std::vector<std::string> m_Frames;  
 
     Sprite getSprite();
+
+    static const Texture& getDefaultTexture(); 
+
 };
 
 #endif

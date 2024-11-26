@@ -33,6 +33,10 @@ private:
     Texture m_bonusTextureSnow;
     Texture m_bonusTextureDefault;
 
+    // texture characters
+    Texture m_EnemiesTexture;
+
+
     std::vector<Monster> m_Enemies; 
 
 

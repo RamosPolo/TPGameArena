@@ -23,24 +23,21 @@ Engine::Engine()
     m_BackgroundSprite.setTexture(m_BackgroundTexture);
 
     // texture des balles
-    m_BulletTexture.loadFromFile("../assets/image/bullet.png");
-    m_BulletTextureFire.loadFromFile("../assets/image/fireBullet.png");
-    m_BulletTextureSnow.loadFromFile("../assets/image/snowBall.png");
+    m_BulletTexture.loadFromFile("./assets/image/bullet.png");
+    m_BulletTextureFire.loadFromFile("./assets/image/fireBullet.png");
+    m_BulletTextureSnow.loadFromFile("./assets/image/snowBall.png");
 
     // texture des bonus
-    m_bonusTextureDefault.loadFromFile("../assets/image/defaultRing.png");
-    m_bonusTextureFire.loadFromFile("../assets/image/fireRing.png");
-    m_bonusTextureSnow.loadFromFile("../assets/image/snowRing.png");
+    m_bonusTextureDefault.loadFromFile("./assets/image/defaultRing.png");
+    m_bonusTextureFire.loadFromFile("./assets/image/fireRing.png");
+    m_bonusTextureSnow.loadFromFile("./assets/image/snowRing.png");
+    m_EnemiesTexture.loadFromFile("./assets/image/Golem/Walking.png");
 
     m_bonus = Bonus();
 
-//    // m_Enemies.push_back(Monster());  
-    // m_Enemies.push_back(Monster());
-
-    for (int i = 0; i < 5; ++i) {  // Exemple : créer 5 monstres
-        Monster monster(100);  
-
-        m_Enemies.push_back(monster);  // Ajouter le monstre au tableau
+    for (int i = 0; i < 5; ++i) {  
+        Monster monster(100, m_EnemiesTexture);  
+        m_Enemies.push_back(monster);
     }
  
 }
