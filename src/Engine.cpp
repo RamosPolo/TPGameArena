@@ -17,9 +17,7 @@ Engine::Engine()
  
     m_Window.setFramerateLimit(50);
 
-    // Load the background into the texture
-    // Be sure to scale this image to your screen size
-    m_BackgroundTexture.loadFromFile("../assets/image/arena_steamPunk.png");
+    m_BackgroundTexture.loadFromFile("./assets/image/arena_steamPunk.png");
 
     // Associate the sprite with the texture
     m_BackgroundSprite.setTexture(m_BackgroundTexture);
@@ -36,6 +34,15 @@ Engine::Engine()
 
     m_bonus = Bonus();
 
+//    // m_Enemies.push_back(Monster());  
+    // m_Enemies.push_back(Monster());
+
+    for (int i = 0; i < 5; ++i) {  // Exemple : créer 5 monstres
+        Monster monster(100);  
+
+        m_Enemies.push_back(monster);  // Ajouter le monstre au tableau
+    }
+ 
 }
  
 void Engine::start()
@@ -173,7 +180,10 @@ void Engine::draw()
     // draw le joueur
 
     m_Window.draw(m_Player.getSprite());
-    m_Window.draw(m_Golem.getSprite());
+
+    for (auto &ennemi : m_Enemies) {
+        m_Window.draw(ennemi.getSprite());    
+    }
 
 
     //m_ObstacleFactory.drawObstacles(m_Window);
@@ -195,10 +205,14 @@ void Engine::update(float dtAsSeconds)
 {
     unsigned int windowWidth = m_Window.getSize().x;
     unsigned int windowHeight = m_Window.getSize().y;
+    
+    
 
     m_Player.update(dtAsSeconds, windowWidth, windowHeight);
-    m_Golem.update(dtAsSeconds, windowWidth, windowHeight);
-
+    
+    for (auto &ennemi : m_Enemies) {
+        ennemi.update(dtAsSeconds, windowWidth, windowHeight, m_Player.getPositionX(), m_Player.getPositionY());
+    }
 
     // Mise à jour des projectiles
     auto it = bullets.begin();

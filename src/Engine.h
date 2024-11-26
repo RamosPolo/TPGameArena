@@ -33,6 +33,9 @@ private:
     Texture m_bonusTextureSnow;
     Texture m_bonusTextureDefault;
 
+    std::vector<Monster> m_Enemies; 
+
+
     // listes des bullets
     std::vector<Bullet> bullets;
 
@@ -44,9 +47,6 @@ private:
 
     // player
     Player m_Player;
-
-    // les monstres
-    Monster m_Golem;
 
     // les Obstacles
     ObstacleFactory m_ObstacleFactory;
@@ -60,6 +60,8 @@ private:
     void update(float dtAsSeconds);
     void draw();
     void addBullet(Bullet bullet);
+    //void checkEnemyCollisions(); 
+    //void resolveCollision(Monster &ennemi1, Monster &ennemi2);
  
 public:
     // The Engine constructor

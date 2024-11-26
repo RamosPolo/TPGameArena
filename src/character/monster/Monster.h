@@ -7,7 +7,7 @@ class Monster : public Character {
 
 public:
     // Constructeur qui passe la vitesse au constructeur de Character
-    Monster(float speed = 400);
+    Monster(float speed = 200);
 
     // Implémentation des méthodes de mouvement spécifiques au joueur
     void moveLeft() override;
@@ -21,7 +21,8 @@ public:
     void updateSprite() override;
  
     // Implémentation de la méthode update pour le joueur
-    void update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight) override;
+    void update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight, int positionPlayerX, int positionPlayerY );
+    void positionnerSurBord();
 };
 
 #endif

@@ -1,13 +1,8 @@
-//
-// Created by PC on 21/11/2024.
-//
-
 #include "Obstacle.h"
-
 #include <stdexcept>
 
 Obstacle::Obstacle() {
-    if (!O_Texture.loadFromFile("../assets/image/WallTexture.png")) {
+    if (!O_Texture.loadFromFile("./assets/image/WallTexture.png")) {
         throw std::runtime_error("Erreur : Impossible de charger la texture !");
     }
     O_sprite.setTextureRect(IntRect(10,10,64,64));

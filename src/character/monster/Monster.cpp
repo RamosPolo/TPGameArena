@@ -1,48 +1,101 @@
 #include <vector>
 #include <iostream>
 #include "Monster.h"
+#include <cmath>
+#include <cstdlib> 
+#include <ctime> 
 
 Monster::Monster(float speed) : Character(speed) {
         // Gérer l'erreur si le fichier n'est pas trouvé
         std::cerr << "Erreur: Impossible de charger le sprite sheet !" << std::endl;
     }
 
-    // Définir la taille d'une frame (selon ton sprite sheet)
+    m_Speed = 100;
+
     m_FrameWidth = 900;
     m_FrameHeight = 900;
+
+    float scaleFactor = 1.0f / 3.0f;
 
     // Définir le sprite avec la première frame (décalée de 10px dans le sprite sheet)
     m_Sprite.setTexture(m_Texture);
     m_Sprite.setTextureRect(sf::IntRect(10, 10, m_FrameWidth, m_FrameHeight));
-    m_Sprite.setScale(0.5f, 0.5f); 
+    m_Sprite.setScale(scaleFactor, scaleFactor); // Orientation normale
 
-    // Positionner le sprite sur la scène
-    m_Position.x = 500; // Position initiale en X
-    m_Position.y = 800; // Position initiale en Y
+
+    // Initialiser le générateur de nombres aléatoires
+    std::srand(static_cast<unsigned int>(std::time(0)) + std::rand());  // Modification pour garantir des valeurs différentes
+
+    // Positionner le monstre aléatoirement sur un des bords
+    positionnerSurBord();
     m_Sprite.setPosition(m_Position);
 }
 
-void Monster::update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight) {
-    if (m_RightPressed && m_Position.x + m_Sprite.getGlobalBounds().width < windowWidth) {
-        m_Position.x += m_Speed * elapsedTime;
+// Fonction pour positionner le monstre sur un bord de la fenêtre de jeu
+void Monster::positionnerSurBord() {
+    int windowWidth = 1920; 
+    int windowHeight = 1080;
+
+    int bord = std::rand() % 4; 
+
+    if (bord == 0) {  // Bord gauche
+        m_Position.x = 0;  
+        m_Position.y = std::rand() % windowHeight;
+    }
+    else if (bord == 1) {  // Bord droit
+        m_Position.x = windowWidth;  
+        m_Position.y = std::rand() % windowHeight;  
+    }
+    else if (bord == 2) {  // Bord haut
+        m_Position.x = std::rand() % windowWidth;  
+        m_Position.y = 0; 
+    }
+    else {  // Bord bas
+        m_Position.x = std::rand() % windowWidth;  
+        m_Position.y = windowHeight;
+    }
+}
+
+void Monster::update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight, int positionPlayerX, int positionPlayerY) {
+    float deltaX = positionPlayerX - m_Position.x;
+    float deltaY = positionPlayerY - m_Position.y;
+
+    // Calcul de la distance
+    float distance = std::sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    // Initialiser les états des directions
+    m_RightPressed = false;
+    m_LeftPressed = false;
+
+    // Normalisation de la direction (éviter une division par zéro)
+    if (distance > 0) {
+        deltaX /= distance;
+        deltaY /= distance;
+
+        // Déterminer la direction horizontale uniquement
+        if (deltaX > 0) {
+            m_RightPressed = true; // Déplacement vers la droite
+        } else {
+            m_LeftPressed = true;  // Déplacement vers la gauche
+        }
+
+        // Mise à jour de la position
+        m_Position.x += deltaX * m_Speed * elapsedTime;
+        m_Position.y += deltaY * m_Speed * elapsedTime;
     }
 
-    if (m_LeftPressed && m_Position.x > 0) {
-        m_Position.x -= m_Speed * elapsedTime;
-    }
+    // Vérification des limites de la fenêtre
+    if (m_Position.x < 0) m_Position.x = 0;
+    if (m_Position.x + m_Sprite.getGlobalBounds().width > windowWidth) 
+        m_Position.x = windowWidth - m_Sprite.getGlobalBounds().width;
+    if (m_Position.y < 0) m_Position.y = 0;
+    if (m_Position.y + m_Sprite.getGlobalBounds().height > windowHeight) 
+        m_Position.y = windowHeight - m_Sprite.getGlobalBounds().height;
 
-    if (m_TopPressed && m_Position.y > 0) {
-        m_Position.y -= m_Speed * elapsedTime;
-    }
-
-    if (m_DownPressed && m_Position.y + m_Sprite.getGlobalBounds().height < windowHeight) {
-        m_Position.y += m_Speed * elapsedTime;
-    }
-
+    // Met à jour la position et le sprite
     updateSprite();
     m_Sprite.setPosition(m_Position);
 }
-
 
 void Monster::moveLeft() {
     m_LeftPressed = true;
@@ -53,8 +106,6 @@ void Monster::moveRight() {
     m_RightPressed = true;
     updateSprite();  
 }
-
-
 
 void Monster::stopLeft() {
     m_LeftPressed = false;
@@ -86,28 +137,35 @@ void Monster::stopDown() {
     updateSprite();  
 }
 
+
 void Monster::updateSprite() {
-    if (m_RightPressed || m_LeftPressed || m_TopPressed || m_DownPressed) {
-        m_CurrentFrame = (m_CurrentFrame + 1) % 24; // 12 frames au total (3 lignes x 4 colonnes)
+    // Réduction de la taille du sprite (divisé par 3)
+    float scaleFactor = 1.0f / 3.0f;
 
-        // Calculer la position de la frame dans le sprite sheet
-        int column = m_CurrentFrame % 4; // 4 colonnes
-        int row = m_CurrentFrame / 4;   // 3 lignes
+    // Définir la frame à afficher (ici, testons la frame avec l'indice 3)
+    m_CurrentFrame = (m_CurrentFrame + 1) % 23; // On boucle entre 23 frames valides
 
-        // Définir la région de la frame à afficher
-        int x = 10 + column * 540; // 10px de décalage + 520px de largeur + 20px d'espace
-        int y = 10 + row * 440;    // 10px de décalage + 420px de hauteur + 20px d'espace
-        m_Sprite.setTextureRect(sf::IntRect(x, y, 520, 420));
-    }
+    // Calcul des coordonnées dans le sprite sheet (5 colonnes et 5 lignes)
+    int column = m_CurrentFrame % 5; 
+    int row = m_CurrentFrame / 5;  
+
+    // Calculer la position exacte de la frame dans le sprite sheet
+    int x = column * 930; 
+    int y = row * 930;    
+
+    // Définir la région de la frame dans le sprite sheet
+    m_Sprite.setTextureRect(sf::IntRect(x, y, 930, 930)); // Sélectionner la portion correcte de la texture
 
     // Gérer l'orientation du sprite
     if (m_RightPressed && !m_IsFacingRight) {
         m_IsFacingRight = true;
-        m_Sprite.setScale(0.5f, 0.5f);
+        m_Sprite.setScale(scaleFactor, scaleFactor); // Orientation normale
         m_Sprite.setOrigin(0, 0);
     } else if (m_LeftPressed && m_IsFacingRight) {
         m_IsFacingRight = false;
-        m_Sprite.setScale(-0.5f, 0.5f);
-        m_Sprite.setOrigin(520, 0); // Ajustement pour l'inversion horizontale
+        m_Sprite.setScale(-scaleFactor, scaleFactor); // Miroir horizontal
+        m_Sprite.setOrigin(900, 0); // Ajustement pour l'inversion horizontale
     }
 }
+
+
