@@ -2,26 +2,19 @@
 #define MONSTER_H
 
 #include "../Character.h"
+#include <SFML/Graphics.hpp>
 
 class Monster : public Character {
-
 public:
+    Monster(float speed, const sf::Texture& texture, int life);
 
-    Monster(float speed = 200, const Texture& texture = getDefaultTexture(), int l = 3);
+    // Méthode d'update spécifique pour le monstre
+    void update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight, int positionPlayerX, int positionPlayerY);
+    
+    // Mise à jour du sprite du monstre
+    void updateSprite() override;
 
-    // Implémentation des méthodes de mouvement spécifiques au joueur
-    void moveLeft() ;
-    void moveRight() ;
-    void stopLeft() ;
-    void stopRight() ;
-    void moveTop() ;
-    void stopTop() ;
-    void moveDown() ;
-    void stopDown() ;
-    void updateSprite() ;
- 
-    // Implémentation de la méthode update pour le joueur
-    void update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight, int positionPlayerX, int positionPlayerY );
+private:
     void positionnerSurBord();
 };
 

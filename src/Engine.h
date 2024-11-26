@@ -54,7 +54,8 @@ private:
     Time spawnIntervalBonus = seconds(7.f); // 7 secondes
 
     // player
-    Player m_Player;
+    Player m_Player = Player(400.f, 5);
+
 
     // les Obstacles
     ObstacleFactory m_ObstacleFactory;

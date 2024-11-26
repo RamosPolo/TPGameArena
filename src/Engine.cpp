@@ -4,7 +4,7 @@
 #include "Obstacles/Obstacle.h"
 
 
-Engine::Engine(): m_Player(400, 5) {
+Engine::Engine() {
     // Get the screen resolution and create an SFML window and View
     Vector2f resolution;
     resolution.x = VideoMode::getDesktopMode().width;
@@ -34,12 +34,12 @@ Engine::Engine(): m_Player(400, 5) {
 
     m_bonus = Bonus();
 
-    m_EnemiesTexture.loadFromFile("../assets/image/Golem/Walking.png");
+    m_EnemiesTexture.loadFromFile("./assets/image/Golem/Walking.png");
 
     for (int i = 0; i < 5; ++i) {
-        Monster monster(100, m_EnemiesTexture);
+        Monster monster(100.f, m_EnemiesTexture, 100); 
         m_CollisionManager.AddObject(monster.getSprite());
-        m_Enemies.push_back(monster);
+        m_Enemies.push_back(monster); 
     }
 }
 
@@ -231,7 +231,7 @@ void Engine::update(float dtAsSeconds)
     }
 
     // collisions
-    m_CollisionManager.handleCollisions();
+    // m_CollisionManager.handleCollisions();
 
 }
 

@@ -4,30 +4,11 @@
 #include "../Character.h"
 
 class Player : public Character {
-
 public:
-    // Constructeur qui passe la vitesse au constructeur de Character
-    Player(float s, int l);
+    Player(float speed, int life);
 
     void update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight);
-
-    void updateSprite();
-
-    void moveLeft();
-
-    void moveRight();
-
-    void stopLeft();
-
-    void stopRight();
-
-    void moveTop();
-
-    void stopTop();
-
-    void moveDown();
-
-    void stopDown();
+    void updateSprite() override;
 };
 
 #endif
