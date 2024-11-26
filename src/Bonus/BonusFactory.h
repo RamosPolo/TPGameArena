@@ -13,7 +13,7 @@ class BonusFactory {
     Clock b_clock;
     public:
     BonusFactory();
-    static Bonus createRandomBonus();
+    Bonus createRandomBonus();
 };
 
 

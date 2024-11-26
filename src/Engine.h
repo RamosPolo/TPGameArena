@@ -59,6 +59,9 @@ private:
     // les Obstacles
     ObstacleFactory m_ObstacleFactory;
 
+    // bonus génerate
+    BonusFactory m_BonusFactory;
+
     // Gérer le temps des projectiles
     Clock m_BulletClock;
     float m_BulletCooldown = 0.5f; // Modifier pour une fréquence de tir plus élever
