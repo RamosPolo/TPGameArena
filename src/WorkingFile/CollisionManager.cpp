@@ -10,8 +10,8 @@ std::vector<std::pair<GameObject*, GameObject*> > CollisionManager::CheckCollisi
     // liste des paires de collsions
     std::vector<std::pair<GameObject*, GameObject*>> collisions;
 
-    for(int i=0; i < objects.size(); i++) {
-        for(int j=i; j < objects.size(); j++) {
+    for (std::size_t i = 0; i < objects.size(); i++) {
+        for (std::size_t j = i; j < objects.size(); j++) {
             if(objects[i]->getSprite()->getGlobalBounds().intersects(objects[j]->getSprite()->getGlobalBounds())) {
                 collisions.emplace_back(objects[i], objects[j]);
             }
@@ -28,8 +28,8 @@ void CollisionManager::handleCollisions() {
     auto collisions = CheckCollision();
 
     for(auto& obj : collisions) {
-        GameObject *obj1 = obj.first;
-        GameObject *obj2 = obj.second;
+        //GameObject *obj1 = obj.first;
+        //GameObject *obj2 = obj.second;
 
         // gérer les collisions ici entre les différents types
         std::cout << "Collision detected between objects!" << std::endl;

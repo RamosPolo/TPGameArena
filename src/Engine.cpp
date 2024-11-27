@@ -38,10 +38,10 @@ Engine::Engine() {
 
     m_EnemiesTexture.loadFromFile("../assets/image/Golem/Walking.png");
 
-    for (int i = 0; i < 5; ++i) {
-        Monster monster(100.f, m_EnemiesTexture, 100);
-        m_CollisionManager.AddObject(&monster);
-        m_Enemies.push_back(monster);
+    for (int i = 0; i < 4; ++i) {
+        Monster* monster = new Monster(100.f, m_EnemiesTexture, 100);
+        m_CollisionManager.AddObject(monster);
+        m_Enemies.push_back(*monster);
     }
 }
 
@@ -156,7 +156,7 @@ void Engine::input() {
 
     if (m_BonusClock.getElapsedTime() >= spawnIntervalBonus) {
         Bonus b = m_BonusFactory.createRandomBonus();
-        //m_CollisionManager.AddObject(b.getSprite());
+        m_CollisionManager.AddObject(&b);
         if(b.getType() == "default") {
             b.setTextureBonus(m_bonusTextureDefault);
         }
@@ -233,7 +233,7 @@ void Engine::update(float dtAsSeconds)
     }
 
     // collisions
-    // m_CollisionManager.handleCollisions();
+     m_CollisionManager.handleCollisions();
 
 }
 
