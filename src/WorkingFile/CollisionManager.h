@@ -4,6 +4,7 @@
 
 #ifndef COLLISIONMANAGER_H
 #define COLLISIONMANAGER_H
+#include <memory>
 #include <vector>
 #include <SFML/Graphics.hpp>
 
@@ -14,7 +15,7 @@ using namespace sf;
 
 class CollisionManager {
 private:
-    std::vector<GameObject*> objects;
+    std::vector<std::unique_ptr<GameObject>> objects;
 public:
     CollisionManager();
     void AddObject(GameObject* obj);

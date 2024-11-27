@@ -40,7 +40,7 @@ Engine::Engine() {
 
     for (int i = 0; i < 4; ++i) {
         Monster* monster = new Monster(100.f, m_EnemiesTexture, 100);
-        m_CollisionManager.AddObject(monster);
+        // m_CollisionManager.AddObject(monster);
         m_Enemies.push_back(*monster);
     }
 }
@@ -111,66 +111,15 @@ void Engine::input() {
         || Keyboard::isKeyPressed(Keyboard::Space))
         && m_BulletClock.getElapsedTime().asSeconds() >= m_BulletCooldown) {
 
-        // Les projectiles sont géreé ici
-        if(this->m_bonus.getType() == "default") {
-            Bullet bul;
-            m_CollisionManager.AddObject(&bul);
-            bul.setTextureBullet(m_BulletTexture);
-            bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
-            float xMouse =  Mouse::getPosition().x;
-            float yMouse =  Mouse::getPosition().y;
-            bul.setTarget(xMouse, yMouse);
-            addBullet(bul);
-
-            // Réinitialise le chronomètre pour le tir
-            m_BulletClock.restart();
-        }
-        if(this->m_bonus.getType() == "fire") {
-            FireBullet bul;
-            m_CollisionManager.AddObject(&bul);
-            bul.setTextureBullet(m_BulletTextureFire);
-            bul.getSprite()->scale(Vector2f(0.06f, 0.06f));
-            bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
-            float xMouse =  Mouse::getPosition().x;
-            float yMouse =  Mouse::getPosition().y;
-            bul.setTarget(xMouse, yMouse);
-            addBullet(bul);
-            // Réinitialise le chronomètre pour le tir
-            m_BulletClock.restart();
-        }
-        if(this->m_bonus.getType() == "snow") {
-            SnowBullet bul;
-            m_CollisionManager.AddObject(&bul);
-            bul.setTextureBullet(m_BulletTextureSnow);
-            bul.getSprite()->scale(Vector2f(0.2f, 0.2f));
-            bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
-            float xMouse =  Mouse::getPosition().x;
-            float yMouse =  Mouse::getPosition().y;
-            bul.setTarget(xMouse, yMouse);
-            addBullet(bul);
-
-            // Réinitialise le chronomètre pour le tir
-            m_BulletClock.restart();
-        }
+        addBullet(createBullet(this->m_bonus.getTypeBonus(), m_Player.getPositionX(), m_Player.getPositionY(), Mouse::getPosition().x, Mouse::getPosition().y));
+        m_BulletClock.restart();
     }
 
     if (m_BonusClock.getElapsedTime() >= spawnIntervalBonus) {
-        Bonus b = m_BonusFactory.createRandomBonus();
-        m_CollisionManager.AddObject(&b);
-        if(b.getType() == "default") {
-            b.setTextureBonus(m_bonusTextureDefault);
-        }
-        if(b.getType() == "fire") {
-            b.setTextureBonus(m_bonusTextureFire);
-        }
-        if(b.getType() == "snow") {
-            b.setTextureBonus(m_bonusTextureSnow);
-        }
-        b.getSprite()->scale(Vector2f(0.2f, 0.2f));
-        b.setPosition(Vector2f(rand() % m_Window.getSize().x, rand() % m_Window.getSize().y));
-        bonuses.push_back(b);
-        m_BonusClock.restart();
+        BonusHandler();
     }
+
+    CollisionHandler();
 }
 
 void Engine::draw()
@@ -212,8 +161,9 @@ void Engine::update(float dtAsSeconds)
 {
     unsigned int windowWidth = m_Window.getSize().x;
     unsigned int windowHeight = m_Window.getSize().y;
-    
-    
+
+    // Engine::gererCollsion() -> gère les collisions
+    gererCollision();
 
     m_Player.update(dtAsSeconds, windowWidth, windowHeight);
     b_barvie.update(m_Player);
@@ -236,12 +186,93 @@ void Engine::update(float dtAsSeconds)
             }
     }
 
-    // collisions
-     m_CollisionManager.handleCollisions();
+
+
+    // collision
+    // ne marche pas...
+    //m_CollisionManager.handleCollisions();
 
 }
 
 void Engine::addBullet(Bullet bullet) {
     bullets.emplace_back(bullet);
+}
+
+void Engine::gererCollision() {
+    // gérer collsion avec les bullets
+    bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [](const Bullet& tir) {
+            return tir.isDestroyed();
+        }), bullets.end());
+
+
+    // gérer collision avec les monstres
+    m_Enemies.erase(std::remove_if(m_Enemies.begin(), m_Enemies.end(), [](const Monster& m) {
+            return m.isDestroyed();
+        }), m_Enemies.end());
+
+
+    // gérer collision avec les monstres
+    bonuses.erase(std::remove_if(bonuses.begin(), bonuses.end(), [](const GameObject& m) {
+            return m.isDestroyed();
+        }), bonuses.end());
+}
+
+void Engine::CollisionHandler() {
+    // collisions entre Ennemmies et Projectiles
+    for (auto &tir: bullets) {
+        for (auto& ennemi : m_Enemies) {
+            if (tir.getSprite()->getGlobalBounds().intersects(ennemi.getSprite()->getGlobalBounds())) {
+                tir.destroy();
+                ennemi.destroy();
+            }
+        }
+    }
+
+    // collisions entre Ennemmies et Projectiles
+    for (auto& b : bonuses) {
+        if (m_Player.getSprite()->getGlobalBounds().intersects(b.getSprite()->getGlobalBounds())) {
+            b.destroy();
+        }
+    }
+}
+
+void Engine::BonusHandler() {
+    Bonus b = m_BonusFactory.createRandomBonus();
+    //m_CollisionManager.AddObject(&b);
+    if(b.getTypeBonus() == "default") {
+        b.setTextureBonus(m_bonusTextureDefault);
+    }
+    if(b.getTypeBonus() == "fire") {
+        b.setTextureBonus(m_bonusTextureFire);
+    }
+    if(b.getTypeBonus() == "snow") {
+        b.setTextureBonus(m_bonusTextureSnow);
+    }
+    b.getSprite()->scale(Vector2f(0.2f, 0.2f));
+    b.setPosition(Vector2f(rand() % m_Window.getSize().x, rand() % m_Window.getSize().y));
+    bonuses.push_back(b);
+    m_BonusClock.restart();
+}
+
+Bullet Engine::createBullet(String t, float posJX, float posJY, float posMX, float posMY) {
+    Bullet bul;
+    if(t == "default") {
+        bul = DefaultBullet();
+        bul.setTextureBullet(m_BulletTexture);
+    }
+    if(t == "fire") {
+        bul = FireBullet();
+        bul.getSprite()->scale(Vector2f(0.06f, 0.06f));
+        bul.setTextureBullet(m_BulletTextureFire);
+    }
+    if(t == "snow") {
+        bul = SnowBullet();
+        bul.setTextureBullet(m_BulletTextureSnow);
+        bul.getSprite()->scale(Vector2f(0.2f, 0.2f));
+    }
+    bul.setPosition(posJX, posJY);
+    bul.setTarget(posMX, posMY);
+    return bul;
+
 }
 

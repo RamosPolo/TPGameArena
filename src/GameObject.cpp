@@ -21,4 +21,10 @@ Sprite *GameObject::getSprite() {
 void GameObject::setSprite(Sprite *s) {
     this->o_sprite = *s;
 }
+void GameObject::destroy() {
+    this->destroyed = true;
+}
 
+bool GameObject::isDestroyed() const {
+    return this->destroyed;
+}

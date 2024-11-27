@@ -16,7 +16,7 @@ class Bonus : public GameObject {
         Vector2f b_position;
         //Sprite b_Sprite;
         Texture b_Texture;
-        std::string type;
+        String bonustype;
     public:
     Bonus();
 
@@ -24,7 +24,7 @@ class Bonus : public GameObject {
 
         //Sprite *getSprite();
         void setTextureBonus(const Texture &t);
-        std::string getType();
+        String getTypeBonus();
 
 };
 

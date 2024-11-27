@@ -14,6 +14,7 @@ Monster::Monster(float speed, const sf::Texture& texture, int life)
     this->getSprite()->setTextureRect(sf::IntRect(0, 0, m_FrameWidth, m_FrameHeight));
     positionnerSurBord();
     this->getSprite()->setPosition(m_Position);
+    this->setType("monster");
 }
 
 // Fonction pour positionner le monstre sur un bord de la fenêtre de jeu

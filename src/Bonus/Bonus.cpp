@@ -5,35 +5,29 @@
 #include "Bonus.h"
 
 Bonus::Bonus() {
-    this->type = "default";
+    this->bonustype = "default";
 }
 
 void Bonus::setPosition(Vector2f v) {
     this->b_position = v;
 }
 
-/*
-Sprite* Bonus::getSprite() {
-    return &this->b_Sprite;
-}
-*/
-
 void Bonus::setTextureBonus(const Texture &t) {
     this->getSprite()->setTexture(t);
 }
 
 
-std::string Bonus::getType() {
-    return this->type;
+String Bonus::getTypeBonus() {
+    return this->bonustype;
 }
 
 FireBonus::FireBonus() {
-    this->type = "fire";
+    this->bonustype = "fire";
     b_position = Vector2f(rand() % 800, rand() % 600); // Position aléatoire
 }
 
 SnowBonus::SnowBonus() {
-    this->type = "snow";
+    this->bonustype = "snow";
     b_position = Vector2f(rand() % 800, rand() % 600); // Position aléatoire
 }
 

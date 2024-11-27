@@ -75,7 +75,16 @@ private:
     void update(float dtAsSeconds);
     void draw();
     void addBullet(Bullet bullet);
-    //void checkEnemyCollisions(); 
+
+    // les collisions
+    void gererCollision();
+    void CollisionHandler();
+
+    void BonusHandler();
+
+    Bullet createBullet(String t, float posJX, float posJY, float posMX, float posMY);
+
+    //void checkEnemyCollisions();
     //void resolveCollision(Monster &ennemi1, Monster &ennemi2);
  
 public:

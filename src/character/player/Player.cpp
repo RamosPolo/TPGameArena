@@ -9,6 +9,9 @@ Player::Player(float speed, int life)
         std::cerr << "Erreur : Impossible de charger le sprite sheet !" << std::endl;
     }
 
+    // pour définir le type
+    this->setType("player");
+
     m_FrameWidth = 520;
     m_FrameHeight = 420;
 
