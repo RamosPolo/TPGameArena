@@ -241,7 +241,7 @@ void Engine::CollisionHandler() {
             if(m_Player.getLife() <= 0 ) {
                 m_Player.destroy();
             } else {
-                m_Player.getDemage(15);
+                m_Player.getDemage(1);
             }
         }
     }
