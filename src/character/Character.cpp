@@ -5,12 +5,6 @@ Character::Character(float speed, int life)
     this->getSprite()->setTexture(getDefaultTexture());
 }
 
-/*
-Sprite* Character::getSprite() {
-    return &m_Sprite;
-}
-*/
-
 float Character::getPositionX() const {
     return m_Position.x;
 }
@@ -38,6 +32,14 @@ const Texture& Character::getDefaultTexture() {
         isLoaded = true;
     }
     return defaultTexture;
+}
+
+void Character::setLife(int nb) {
+    this->m_life = nb;
+}
+
+void Character::getDemage(int nb) {
+    this->setLife(this->getLife() - nb);
 }
 
 void Character::moveLeft() { m_LeftPressed = true; }

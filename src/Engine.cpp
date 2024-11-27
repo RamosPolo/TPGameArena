@@ -222,18 +222,35 @@ void Engine::CollisionHandler() {
     for (auto &tir: bullets) {
         for (auto& ennemi : m_Enemies) {
             if (tir.getSprite()->getGlobalBounds().intersects(ennemi.getSprite()->getGlobalBounds())) {
+                if(ennemi.getLife() <= 0) {
+                    ennemi.destroy();
+                } else {
+                    ennemi.getDemage(25);
+                }
                 tir.destroy();
-                ennemi.destroy();
             }
         }
     }
 
-    // collisions entre Ennemmies et Projectiles
+    // collisions entre Bonus et Joueur
     for (auto& b : bonuses) {
         if (m_Player.getSprite()->getGlobalBounds().intersects(b.getSprite()->getGlobalBounds())) {
+            m_bonus = b;
             b.destroy();
         }
     }
+
+    // Collision Ennemies - Player
+    for (auto& b : m_Enemies) {
+        if (m_Player.getSprite()->getGlobalBounds().intersects(b.getSprite()->getGlobalBounds())) {
+            if(m_Player.getLife() <= 0 ) {
+                m_Player.destroy();
+            } else {
+                m_Player.getDemage(15);
+            }
+        }
+    }
+
 }
 
 void Engine::BonusHandler() {

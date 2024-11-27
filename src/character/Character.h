@@ -31,6 +31,9 @@ protected:
 public:
     Character(float speed, int life);
 
+    void setLife(int nb);
+    void getDemage(int nb);
+
     // Accesseurs
     //Sprite* getSprite();
     float getPositionX() const;
