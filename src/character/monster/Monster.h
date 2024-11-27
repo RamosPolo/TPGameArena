@@ -6,6 +6,7 @@
 
 class Monster : public Character {
 public:
+    Monster() = default;
     Monster(float speed, const sf::Texture& texture, int life);
 
     // Méthode d'update spécifique pour le monstre
@@ -16,6 +17,8 @@ public:
 
 private:
     void positionnerSurBord();
+    float m_scaleFactor;
 };
 
 #endif
+

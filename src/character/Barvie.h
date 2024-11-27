@@ -14,6 +14,7 @@ protected:
     Font b_font;
 
 public:
+    Barvie() = default;
     Barvie(const Character& c);
 
     RectangleShape getRectangle();

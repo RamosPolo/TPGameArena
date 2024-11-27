@@ -13,7 +13,7 @@ protected:
     float m_Speed = 0.f;
     int m_life = 0;
     Vector2f m_Position;
-    //Sprite m_Sprite;
+    Sprite* m_Sprite = this->getSprite();
     Texture m_Texture;
 
     bool m_LeftPressed = false;
@@ -29,6 +29,8 @@ protected:
     static const Texture& getDefaultTexture();
 
 public:
+    Character() = default;
+
     Character(float speed, int life);
 
     void setLife(int nb);
@@ -40,9 +42,14 @@ public:
     float getPositionY() const;
     void setTexture(const Texture& texture);
     int getLife() const;
+    Sprite* getSpriteC();
+    int getSpriteHeight() const;
+    int getSpriteWidth() const;
+
 
     // Mouvement générique
     virtual void updateSprite() = 0;
+
 
     // Mouvement : gestion des états
     virtual void moveLeft();

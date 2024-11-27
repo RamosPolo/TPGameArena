@@ -2,7 +2,7 @@
 
 #include "./character/player/Bullet.h"
 #include "Obstacles/Obstacle.h"
-
+#include "./character/Barvie.h"
 
 Engine::Engine() {
     // Get the screen resolution and create an SFML window and View
@@ -37,6 +37,7 @@ Engine::Engine() {
     m_BonusFactory = BonusFactory();
 
     m_EnemiesTexture.loadFromFile("../assets/image/Golem/Walking.png");
+    b_barvie = Barvie(m_Player);
 
     for (int i = 0; i < 4; ++i) {
         Monster* monster = new Monster(100.f, m_EnemiesTexture, 100);
@@ -185,12 +186,6 @@ void Engine::update(float dtAsSeconds)
                 ++it;
             }
     }
-
-
-
-    // collision
-    // ne marche pas...
-    //m_CollisionManager.handleCollisions();
 
 }
 

@@ -56,8 +56,9 @@ private:
     Time spawnIntervalBonus = seconds(7.f); // 7 secondes
 
     // player
-    Player m_Player = Player(400.f, 5);
-    Barvie b_barvie = Barvie(m_Player);
+    Player m_Player = Player(400.0f, 5);
+
+    Barvie b_barvie = Barvie();
 
 
     // les Obstacles

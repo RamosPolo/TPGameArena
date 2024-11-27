@@ -23,6 +23,11 @@ public:
     std::vector<std::pair<GameObject*, GameObject*>> CheckCollision();
     void handleCollisions();
 
+    int getSpriteHeight() const;
+    int getSpriteWidth() const;
+
+
+
 };
 
 

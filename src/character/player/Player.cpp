@@ -1,28 +1,28 @@
 #include "Player.h"
-#include <vector>
 #include <iostream>
-#include "Player.h"
 
 Player::Player(float speed, int life)
     : Character(speed, life) {
-    if (!m_Texture.loadFromFile("../assets/image/Wraith/Walking.png")) {
+
+        m_FrameWidth = 520;
+        m_FrameHeight = 420;
+
+    if (!m_Texture.loadFromFile("./assets/image/Wraith/Walking.png")) {
         std::cerr << "Erreur : Impossible de charger le sprite sheet !" << std::endl;
     }
 
-    // pour définir le type
-    this->setType("player");
+    // Position et dimensions ajustées
+    int newFrameWidth = m_FrameWidth - 300;
+    int newFrameHeight = m_FrameHeight - 100;
+    int x = 160, y = 60;
 
-    m_FrameWidth = 520;
-    m_FrameHeight = 420;
-
-    // Définir le sprite avec la première frame (décalée de 10px dans le sprite sheet)
+    // Initialisation du sprite
     this->getSprite()->setTexture(m_Texture);
-    this->getSprite()->setTextureRect(sf::IntRect(10, 10, m_FrameWidth, m_FrameHeight));
+    this->getSprite()->setTextureRect(sf::IntRect(x, y, newFrameWidth, newFrameHeight));
     this->getSprite()->setScale(0.5f, 0.5f);
 
-    // Positionner le sprite sur la scène
-    m_Position.x = 500; // Position initiale en X
-    m_Position.y = 800; // Position initiale en Y
+    // Position initiale
+    m_Position = {500, 800};
     this->getSprite()->setPosition(m_Position);
 }
 
@@ -36,7 +36,6 @@ void Player::update(float elapsedTime, unsigned int windowWidth, unsigned int wi
     if (m_TopPressed && m_Position.y > 0) {
         m_Position.y -= m_Speed * elapsedTime;
     }
-
     if (m_DownPressed && m_Position.y + this->getSprite()->getGlobalBounds().height < windowHeight) {
         m_Position.y += m_Speed * elapsedTime;
     }
@@ -47,14 +46,20 @@ void Player::update(float elapsedTime, unsigned int windowWidth, unsigned int wi
 
 void Player::updateSprite() {
     if (m_LeftPressed || m_RightPressed || m_TopPressed || m_DownPressed) {
+        // Mise à jour de l'animation
         m_CurrentFrame = (m_CurrentFrame + 1) % 12;
         int column = m_CurrentFrame % 4;
         int row = m_CurrentFrame / 4;
-        int x = 10 + column * 540;
-        int y = 10 + row * 440;
-        this->getSprite()->setTextureRect(IntRect(x, y, 520, 420));
+
+        // Ajustement du rectangle de la texture
+        int newFrameWidth = m_FrameWidth - 300;
+        int newFrameHeight = m_FrameHeight - 100;
+        int x = 160 + column * (m_FrameWidth + 20);
+        int y = 60 + row * (m_FrameHeight + 20);
+        this->getSprite()->setTextureRect(sf::IntRect(x, y, newFrameWidth, newFrameHeight));
     }
 
+    // Inverser l'échelle si nécessaire
     if (m_RightPressed && !m_IsFacingRight) {
         m_IsFacingRight = true;
         this->getSprite()->setScale(0.5f, 0.5f);
@@ -62,7 +67,6 @@ void Player::updateSprite() {
     } else if (m_LeftPressed && m_IsFacingRight) {
         m_IsFacingRight = false;
         this->getSprite()->setScale(-0.5f, 0.5f);
-        this->getSprite()->setOrigin(520, 0);
+        this->getSprite()->setOrigin(m_FrameWidth - 300, 0);
     }
 }
-

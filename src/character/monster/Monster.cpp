@@ -7,15 +7,33 @@
 
 Monster::Monster(float speed, const sf::Texture& texture, int life)
     : Character(speed, life) {
-    m_FrameWidth = 900;
-    m_FrameHeight = 900;
-    m_Texture = texture;
+
+    // Définir la taille initiale des frames (doit correspondre à celles utilisées dans updateSprite)
+    m_FrameWidth = 430;  // Largeur de chaque frame
+    m_FrameHeight = 600; // Hauteur de chaque frame
+
+    m_Texture = texture; // Associer la texture
+    m_scaleFactor = 0.3f; // Facteur de mise à l'échelle du sprite
+
+    // Configurer le sprite avec la texture
     this->getSprite()->setTexture(texture);
-    this->getSprite()->setTextureRect(sf::IntRect(0, 0, m_FrameWidth, m_FrameHeight));
-    positionnerSurBord();
-    this->getSprite()->setPosition(m_Position);
+
+    // Définir la première frame affichée (offset initial)
+    int initialX = 300; 
+    int initialY = 200; 
+    this->getSprite()->setTextureRect(sf::IntRect(initialX, initialY, m_FrameWidth, m_FrameHeight));
+    this->getSprite()->setOrigin(0, 0);
+
+    // Appliquer l'échelle
+    this->getSprite()->setScale(m_scaleFactor, m_scaleFactor);
+
+
+    // Définir d'autres propriétés
     this->setType("monster");
+    positionnerSurBord(); // Positionner le monstre sur le bord
+    this->getSprite()->setPosition(m_Position); // Appliquer la position
 }
+
 
 // Fonction pour positionner le monstre sur un bord de la fenêtre de jeu
 void Monster::positionnerSurBord() {
@@ -52,8 +70,8 @@ void Monster::update(float elapsedTime, unsigned int windowWidth, unsigned int w
         }
 
         // Mise à jour de la position
-        m_Position.x += deltaX * m_Speed * elapsedTime;
-        m_Position.y += deltaY * m_Speed * elapsedTime;
+         m_Position.x += deltaX * m_Speed * elapsedTime;
+          m_Position.y += deltaY * m_Speed * elapsedTime;
     }
 
     // Vérification des limites de la fenêtre
@@ -71,7 +89,6 @@ void Monster::update(float elapsedTime, unsigned int windowWidth, unsigned int w
 
 void Monster::updateSprite() {
     // Réduction de la taille du sprite (divisé par 3)
-    float scaleFactor = 0.3f;
 
     // Définir la frame à afficher (ici, testons la frame avec l'indice 3)
     m_CurrentFrame = (m_CurrentFrame + 1) % 23; // On boucle entre 23 frames valides
@@ -81,19 +98,20 @@ void Monster::updateSprite() {
     int row = m_CurrentFrame / 5;  
 
     // Calculer la position exacte de la frame dans le sprite sheet
-    int x = column * 930; 
-    int y = row * 930;    
+  
+
+    int x = 300 + column * (m_FrameWidth + 480); 
+    int y = 200 + row * (m_FrameHeight + 300);  
 
     // Définir la région de la frame dans le sprite sheet
-    this->getSprite()->setTextureRect(sf::IntRect(x, y, 930, 930)); // Sélectionner la portion correcte de la texture
-
+    this->getSprite()->setTextureRect(sf::IntRect(x, y, m_FrameWidth, m_FrameHeight)); // Sélectionner la portion correcte de la texture
 
     // Gérer l'orientation du sprite
     if (m_RightPressed) {
-        this->getSprite()->setScale(scaleFactor, scaleFactor);
+        this->getSprite()->setScale(m_scaleFactor, m_scaleFactor);
         this->getSprite()->setOrigin(0, 0);
     } else if (m_LeftPressed) {
-        this->getSprite()->setScale(-scaleFactor, scaleFactor);
-        this->getSprite()->setOrigin(900, 0);
+        this->getSprite()->setScale(-m_scaleFactor, m_scaleFactor);
+        this->getSprite()->setOrigin(m_FrameWidth, 0);
     }
 }
