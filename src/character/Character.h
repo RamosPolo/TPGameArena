@@ -13,7 +13,7 @@ protected:
     float m_Speed = 0.f;
     int m_life = 0;
     Vector2f m_Position;
-    Sprite m_Sprite;
+    //Sprite m_Sprite;
     Texture m_Texture;
 
     bool m_LeftPressed = false;
@@ -32,7 +32,7 @@ public:
     Character(float speed, int life);
 
     // Accesseurs
-    Sprite* getSprite();
+    //Sprite* getSprite();
     float getPositionX() const;
     float getPositionY() const;
     void setTexture(const Texture& texture);

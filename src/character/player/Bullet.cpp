@@ -7,13 +7,14 @@ Bullet::Bullet() {
     this->b_speed = 500;
 }
 
+/*
 Sprite* Bullet::getSprite() {
     return &this->b_Sprite;
 }
-
+*/
 
 void Bullet::setTextureBullet(const Texture &t) {
-    this->b_Sprite.setTexture(t);
+    this->getSprite()->setTexture(t);
 }
 
 void Bullet::setPosition(float x, float y) {
@@ -27,7 +28,7 @@ void Bullet::move(float elapsedTime) {
     b_position.y += b_direction.y * b_speed * elapsedTime;
 
     // Mettre à jour la position du sprite
-    b_Sprite.setPosition(b_position.x, b_position.y);
+    this->getSprite()->setPosition(b_position.x, b_position.y);
 }
 
 void Bullet::setTarget(float x, float y) {

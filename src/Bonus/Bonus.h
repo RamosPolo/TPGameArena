@@ -6,13 +6,15 @@
 #define BONUS_H
 #include <SFML/Graphics.hpp>
 
+#include "../GameObject.h"
+
 using namespace sf;
 
 
-class Bonus {
+class Bonus : public GameObject {
     protected:
         Vector2f b_position;
-        Sprite b_Sprite;
+        //Sprite b_Sprite;
         Texture b_Texture;
         std::string type;
     public:
@@ -20,7 +22,7 @@ class Bonus {
 
         void setPosition(Vector2f v);
 
-        Sprite *getSprite();
+        //Sprite *getSprite();
         void setTextureBonus(const Texture &t);
         std::string getType();
 

@@ -16,30 +16,32 @@ Engine::Engine() {
 
     m_Window.setFramerateLimit(50);
 
-    m_BackgroundTexture.loadFromFile("./assets/image/arena_steamPunk.png");
+    m_BackgroundTexture.loadFromFile("../assets/image/arena_steamPunk.png");
 
     // Associate the sprite with the texture
     m_BackgroundSprite.setTexture(m_BackgroundTexture);
 
     // texture des balles
-    m_BulletTexture.loadFromFile("./assets/image/bullet.png");
-    m_BulletTextureFire.loadFromFile("./assets/image/fireBullet.png");
-    m_BulletTextureSnow.loadFromFile("./assets/image/snowBall.png");
+    m_BulletTexture.loadFromFile("../assets/image/bullet.png");
+    m_BulletTextureFire.loadFromFile("../assets/image/fireBullet.png");
+    m_BulletTextureSnow.loadFromFile("../assets/image/snowBall.png");
 
     // texture des bonus
-    m_bonusTextureDefault.loadFromFile("./assets/image/defaultRing.png");
-    m_bonusTextureFire.loadFromFile("./assets/image/fireRing.png");
-    m_bonusTextureSnow.loadFromFile("./assets/image/snowRing.png");
-    m_EnemiesTexture.loadFromFile("./assets/image/Golem/Walking.png");
+    m_bonusTextureDefault.loadFromFile("../assets/image/defaultRing.png");
+    m_bonusTextureFire.loadFromFile("../assets/image/fireRing.png");
+    m_bonusTextureSnow.loadFromFile("../assets/image/snowRing.png");
+    m_EnemiesTexture.loadFromFile("../assets/image/Golem/Walking.png");
 
-    m_bonus = Bonus();
+    //m_bonus = Bonus();
 
-    m_EnemiesTexture.loadFromFile("./assets/image/Golem/Walking.png");
+    m_BonusFactory = BonusFactory();
+
+    m_EnemiesTexture.loadFromFile("../assets/image/Golem/Walking.png");
 
     for (int i = 0; i < 5; ++i) {
-        Monster monster(100.f, m_EnemiesTexture, 100); 
-        m_CollisionManager.AddObject(monster.getSprite());
-        m_Enemies.push_back(monster); 
+        Monster monster(100.f, m_EnemiesTexture, 100);
+        m_CollisionManager.AddObject(&monster);
+        m_Enemies.push_back(monster);
     }
 }
 
@@ -112,7 +114,7 @@ void Engine::input() {
         // Les projectiles sont géreé ici
         if(this->m_bonus.getType() == "default") {
             Bullet bul;
-            m_CollisionManager.AddObject(bul.getSprite());
+            m_CollisionManager.AddObject(&bul);
             bul.setTextureBullet(m_BulletTexture);
             bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
             float xMouse =  Mouse::getPosition().x;
@@ -125,7 +127,7 @@ void Engine::input() {
         }
         if(this->m_bonus.getType() == "fire") {
             FireBullet bul;
-            m_CollisionManager.AddObject(bul.getSprite());
+            m_CollisionManager.AddObject(&bul);
             bul.setTextureBullet(m_BulletTextureFire);
             bul.getSprite()->scale(Vector2f(0.06f, 0.06f));
             bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
@@ -138,7 +140,7 @@ void Engine::input() {
         }
         if(this->m_bonus.getType() == "snow") {
             SnowBullet bul;
-            m_CollisionManager.AddObject(bul.getSprite());
+            m_CollisionManager.AddObject(&bul);
             bul.setTextureBullet(m_BulletTextureSnow);
             bul.getSprite()->scale(Vector2f(0.2f, 0.2f));
             bul.setPosition(m_Player.getPositionX(), m_Player.getPositionY());
@@ -154,7 +156,7 @@ void Engine::input() {
 
     if (m_BonusClock.getElapsedTime() >= spawnIntervalBonus) {
         Bonus b = m_BonusFactory.createRandomBonus();
-        m_CollisionManager.AddObject(b.getSprite());
+        //m_CollisionManager.AddObject(b.getSprite());
         if(b.getType() == "default") {
             b.setTextureBonus(m_bonusTextureDefault);
         }

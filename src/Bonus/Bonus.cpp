@@ -12,12 +12,14 @@ void Bonus::setPosition(Vector2f v) {
     this->b_position = v;
 }
 
+/*
 Sprite* Bonus::getSprite() {
     return &this->b_Sprite;
 }
+*/
 
 void Bonus::setTextureBonus(const Texture &t) {
-    this->b_Sprite.setTexture(t);
+    this->getSprite()->setTexture(t);
 }
 
 

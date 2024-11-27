@@ -5,18 +5,16 @@
 #include "BonusFactory.h"
 #include <memory>
 
-BonusFactory::BonusFactory() {
-
-}
+BonusFactory::BonusFactory() = default;
 
 Bonus BonusFactory::createRandomBonus() {
-    int bonusType  = rand()%2   +0;
+    const int bonusType  = rand()%2   +0;
     if (bonusType == 0) {
         return SnowBonus();
     }
     if(bonusType == 1) {
         return FireBonus();
     } else {
-        return Bonus();
+        return {};
     }
 }

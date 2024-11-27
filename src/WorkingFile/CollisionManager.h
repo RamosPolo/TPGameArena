@@ -7,17 +7,19 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "../GameObject.h"
+
 using namespace sf;
 
 
 class CollisionManager {
 private:
-    std::vector<Sprite*> objects;
+    std::vector<GameObject*> objects;
 public:
     CollisionManager();
-    void AddObject(Sprite* obj);
+    void AddObject(GameObject* obj);
     // renvoie une liste de paires de Sprites
-    std::vector<std::pair<Sprite*, Sprite*>> CheckCollision();
+    std::vector<std::pair<GameObject*, GameObject*>> CheckCollision();
     void handleCollisions();
 
 };

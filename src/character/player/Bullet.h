@@ -7,10 +7,12 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "../../GameObject.h"
+
 using namespace sf;
 
 
-class Bullet {
+class Bullet : public GameObject {
 protected:
     Vector2f b_position;
     Vector2f b_target;
@@ -23,7 +25,7 @@ protected:
 public:
     Bullet();
 
-    Sprite *getSprite();
+    /*Sprite *getSprite();*/
     void setPosition(float x, float y);
     void move(float elapsedTime);
     void setTarget(float x, float y);

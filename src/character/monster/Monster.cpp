@@ -1,3 +1,5 @@
+#include <vector>
+#include <iostream>
 #include "Monster.h"
 #include <cmath>
 #include <cstdlib>
@@ -8,12 +10,13 @@ Monster::Monster(float speed, const sf::Texture& texture, int life)
     m_FrameWidth = 900;
     m_FrameHeight = 900;
     m_Texture = texture;
-    m_Sprite.setTexture(texture);
-    m_Sprite.setTextureRect(sf::IntRect(0, 0, m_FrameWidth, m_FrameHeight));
+    this->getSprite()->setTexture(texture);
+    this->getSprite()->setTextureRect(sf::IntRect(0, 0, m_FrameWidth, m_FrameHeight));
     positionnerSurBord();
-    m_Sprite.setPosition(m_Position);
+    this->getSprite()->setPosition(m_Position);
 }
 
+// Fonction pour positionner le monstre sur un bord de la fenêtre de jeu
 void Monster::positionnerSurBord() {
     int windowWidth = 1920, windowHeight = 1080;
     int bord = std::rand() % 4;  // Positionner aléatoirement sur un bord
@@ -54,15 +57,15 @@ void Monster::update(float elapsedTime, unsigned int windowWidth, unsigned int w
 
     // Vérification des limites de la fenêtre
     if (m_Position.x < 0) m_Position.x = 0;
-    if (m_Position.x + m_Sprite.getGlobalBounds().width > windowWidth) 
-        m_Position.x = windowWidth - m_Sprite.getGlobalBounds().width;
+    if (m_Position.x + this->getSprite()->getGlobalBounds().width > windowWidth)
+        m_Position.x = windowWidth - this->getSprite()->getGlobalBounds().width;
     if (m_Position.y < 0) m_Position.y = 0;
-    if (m_Position.y + m_Sprite.getGlobalBounds().height > windowHeight) 
-        m_Position.y = windowHeight - m_Sprite.getGlobalBounds().height;
+    if (m_Position.y + this->getSprite()->getGlobalBounds().height > windowHeight)
+        m_Position.y = windowHeight - this->getSprite()->getGlobalBounds().height;
 
     // Met à jour la position et le sprite
     updateSprite();
-    m_Sprite.setPosition(m_Position);
+    this->getSprite()->setPosition(m_Position);
 }
 
 void Monster::updateSprite() {
@@ -81,15 +84,15 @@ void Monster::updateSprite() {
     int y = row * 930;    
 
     // Définir la région de la frame dans le sprite sheet
-    m_Sprite.setTextureRect(sf::IntRect(x, y, 930, 930)); // Sélectionner la portion correcte de la texture
+    this->getSprite()->setTextureRect(sf::IntRect(x, y, 930, 930)); // Sélectionner la portion correcte de la texture
 
 
     // Gérer l'orientation du sprite
     if (m_RightPressed) {
-        m_Sprite.setScale(scaleFactor, scaleFactor);
-        m_Sprite.setOrigin(0, 0);
+        this->getSprite()->setScale(scaleFactor, scaleFactor);
+        this->getSprite()->setOrigin(0, 0);
     } else if (m_LeftPressed) {
-        m_Sprite.setScale(-scaleFactor, scaleFactor);
-        m_Sprite.setOrigin(900, 0);
+        this->getSprite()->setScale(-scaleFactor, scaleFactor);
+        this->getSprite()->setOrigin(900, 0);
     }
 }

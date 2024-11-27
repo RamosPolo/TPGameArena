@@ -4,16 +4,21 @@
 
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
+#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/String.hpp>
 
+using namespace sf;
 
 class GameObject {
 private:
-    sf::String type;
+    Sprite o_sprite;
+    String type;
     public:
     GameObject();
-    sf::String getType();
-    void setType(const sf::String& type);
+    String getType();
+    void setType(const String& type);
+    Sprite *getSprite();
+    void setSprite(Sprite *sprite);
 
 };
 
