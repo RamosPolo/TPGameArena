@@ -36,6 +36,7 @@ public:
     float getPositionX() const;
     float getPositionY() const;
     void setTexture(const Texture& texture);
+    int getLife() const;
 
     // Mouvement générique
     virtual void updateSprite() = 0;

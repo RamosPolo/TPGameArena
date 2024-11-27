@@ -11,6 +11,8 @@
 #include "Obstacles/ObstacleFactory.h"
 #include "WorkingFile/CollisionManager.h"
 
+#include "./character/Barvie.h"
+
 using namespace sf;
  
 class Engine
@@ -55,6 +57,7 @@ private:
 
     // player
     Player m_Player = Player(400.f, 5);
+    Barvie b_barvie = Barvie(m_Player);
 
 
     // les Obstacles

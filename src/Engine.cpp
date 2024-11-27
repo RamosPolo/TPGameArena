@@ -200,6 +200,9 @@ void Engine::draw()
     for (auto & bonus : bonuses) {
         m_Window.draw(*bonus.getSprite());
     }
+
+    m_Window.draw(b_barvie.getRectangle()); 
+
  
     // Show everything we have just drawn
     m_Window.display();
@@ -213,6 +216,7 @@ void Engine::update(float dtAsSeconds)
     
 
     m_Player.update(dtAsSeconds, windowWidth, windowHeight);
+    b_barvie.update(m_Player);
     
     for (auto &ennemi : m_Enemies) {
         ennemi.update(dtAsSeconds, windowWidth, windowHeight, m_Player.getPositionX(), m_Player.getPositionY());

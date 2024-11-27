@@ -19,6 +19,10 @@ float Character::getPositionY() const {
     return m_Position.y;
 }
 
+int Character::getLife() const {
+    return m_life;
+}
+
 void Character::setTexture(const Texture& texture) {
     m_Texture = texture;
     this->getSprite()->setTexture(m_Texture);
