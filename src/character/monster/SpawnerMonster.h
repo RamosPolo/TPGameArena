@@ -12,6 +12,10 @@ private:
     sf::Texture s_golemTexture; 
     void generateGolem(int nbGolem);
 
+    sf::Texture s_golemGlaceTexture;
+    sf::Texture s_golemFeuTexture;
+    sf::Texture s_golemTerreTexture;
+
 
 public:
     SpawnerMonster();

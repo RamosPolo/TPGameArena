@@ -18,7 +18,6 @@ Engine::Engine() {
 
     m_Window.setFramerateLimit(50);
 
-    m_BackgroundTexture.loadFromFile("../assets/image/arena_steamPunk.png");
     // Set le Menu
     m_TextureButtonMenu.loadFromFile("../assets/image/start_button.png");
     m_TextureMenuBackground.loadFromFile("../assets/image/MenuBackground.png");
