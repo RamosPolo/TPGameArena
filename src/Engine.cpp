@@ -362,7 +362,7 @@ void Engine::DisplayScore(){
     
     // Load font
     Font font;
-    if (!font.loadFromFile("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf")) {
+    if (!font.loadFromFile("././assets/font/arial.ttf")) {
         // Handle font loading error
     }
 
