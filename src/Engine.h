@@ -58,7 +58,7 @@ private:
     //Monster
     SpawnerMonster sm_SpawnerMonster;
     std::vector<Monster> m_Enemies;
-    int m_NumWave = 0;
+    int m_NumWave = 1;
     bool isCollisionBetweenMonsters(const Monster& m1, const Monster& m2);
     void updateEnemies(float dtAsSeconds, unsigned int windowWidth, unsigned int windowHeight);
 

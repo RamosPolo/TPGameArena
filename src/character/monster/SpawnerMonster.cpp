@@ -11,13 +11,16 @@ SpawnerMonster::SpawnerMonster(){
 std::vector<Monster> SpawnerMonster::generateWave(int niveau){
     s_monsterList.clear();
     if(niveau == 1){
-        generateGolem(4);
+        generateGolem(1);
     }
     if(niveau == 2){
-        generateGolem(7);
+        generateGolem(2);
     }
     if(niveau == 3){
-        generateGolem(10);
+        generateGolem(3);
+    } 
+    if(niveau == 4){
+        generateGolem(4);
     }
 
     return s_monsterList;
@@ -25,7 +28,15 @@ std::vector<Monster> SpawnerMonster::generateWave(int niveau){
 
 void SpawnerMonster::generateGolem(int nbGolem){
     for (int i = 0; i < nbGolem; ++i) {
+        Monster* monster = new Monster(100.f, s_golemGlaceTexture, 30);
+        s_monsterList.push_back(*monster);
+    }
+    for (int i = 0; i < nbGolem; ++i) {
         Monster* monster = new Monster(100.f, s_golemFeuTexture, 30);
+        s_monsterList.push_back(*monster);
+    }
+    for (int i = 0; i < nbGolem; ++i) {
+        Monster* monster = new Monster(100.f, s_golemTerreTexture, 30);
         s_monsterList.push_back(*monster);
     }
 }

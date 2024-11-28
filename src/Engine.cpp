@@ -81,7 +81,7 @@ void Engine::update(float dtAsSeconds)
 
     gererCollision();
 
-    if (m_Enemies.size() == 0) {
+    if (m_Enemies.size() == 0 && m_NumWave < 5  ) {
         m_Enemies = sm_SpawnerMonster.generateWave(m_NumWave);
         m_NumWave = m_NumWave + 1;
     }
@@ -418,7 +418,7 @@ void Engine::DisplayScore(){
     // Wave display
     sf::Text waveText;
     waveText.setFont(font);
-    waveText.setString("Vague: " + std::to_string(m_NumWave - 1));
+    waveText.setString("Vague: " + std::to_string(m_NumWave));
     waveText.setCharacterSize(48);
     waveText.setFillColor(sf::Color::White);
     waveText.setPosition(m_Window.getSize().x - 300, 170);
