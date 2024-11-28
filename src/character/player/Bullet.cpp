@@ -53,22 +53,26 @@ bool Bullet::isOutOfBounds(unsigned int windowWidth, unsigned int windowHeight) 
 
 // FIRE BULLET
 FireBullet::FireBullet(){
-    this->dammage = 10;
+    this->dammage = 35;
     // Initialiser la vitesse
     this->b_speed = 550;
 }
 
 SnowBullet::SnowBullet() {
-    this->dammage = 7;
+    this->dammage = 25;
     // Initialiser la vitesse
     this->b_speed = 470;
 }
 
 DefaultBullet::DefaultBullet() {
-    this->dammage = 5;
+    this->dammage = 15;
     // Initialiser la vitesse
     this->b_speed = 500;
     this->setType("default");
+}
+
+int Bullet::demage() const {
+    return this->dammage;
 }
 
 

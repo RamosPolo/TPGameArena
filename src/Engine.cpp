@@ -215,7 +215,7 @@ void Engine::CollisionHandler() {
                     ennemi.destroy();
                     p_Score += 10;
                 } else {
-                    ennemi.getDemage(25);
+                    ennemi.getDemage(tir.demage());
                 }
                 tir.destroy();
             }

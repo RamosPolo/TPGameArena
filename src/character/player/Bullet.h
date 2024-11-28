@@ -30,6 +30,9 @@ public:
     void move(float elapsedTime);
     void setTarget(float x, float y);
     bool isOutOfBounds(unsigned int windowWidth, unsigned int windowHeight) const;
+
+    int demage() const;
+
     void setTextureBullet(const Texture &t);
 };
 
