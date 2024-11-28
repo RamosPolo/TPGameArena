@@ -263,7 +263,6 @@ void Engine::CollisionHandler() {
 
 void Engine::BonusHandler() {
     Bonus b = m_BonusFactory.createRandomBonus();
-    //m_CollisionManager.AddObject(&b);
     if(b.getTypeBonus() == "default") {
         b.setTextureBonus(m_bonusTextureDefault);
     }
@@ -273,8 +272,8 @@ void Engine::BonusHandler() {
     if(b.getTypeBonus() == "snow") {
         b.setTextureBonus(m_bonusTextureSnow);
     }
-    b.getSprite()->scale(Vector2f(0.2f, 0.2f));
-    b.setPosition(Vector2f(rand() % m_Window.getSize().x, rand() % m_Window.getSize().y));
+    b.getSprite()->scale(Vector2f(0.3f, 0.3f));
+    b.positionnerBonus();
     bonuses.push_back(b);
     m_BonusClock.restart();
 }

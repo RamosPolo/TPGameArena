@@ -8,13 +8,18 @@
 BonusFactory::BonusFactory() = default;
 
 Bonus BonusFactory::createRandomBonus() {
-    const int bonusType  = rand()%2   +0;
+    const int bonusType = rand() % 3;
     if (bonusType == 0) {
         return SnowBonus();
     }
     if(bonusType == 1) {
         return FireBonus();
-    } else {
-        return {};
+    }
+    if(bonusType == 2) {
+        return DefaultBonus();
+    }
+    else {
+        printf("############ Erreur de boucle BonusFactory->createRandomBonus\n");
+        return DefaultBonus();
     }
 }

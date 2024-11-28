@@ -14,18 +14,15 @@ using namespace sf;
 class Bonus : public GameObject {
     protected:
         Vector2f b_position;
-        //Sprite b_Sprite;
         Texture b_Texture;
         String bonustype;
     public:
     Bonus();
-
         void setPosition(Vector2f v);
-
-        //Sprite *getSprite();
         void setTextureBonus(const Texture &t);
         String getTypeBonus();
 
+        void positionnerBonus();
 };
 
 class FireBonus : public Bonus {
@@ -36,6 +33,11 @@ class FireBonus : public Bonus {
 class SnowBonus : public Bonus {
     public:
     SnowBonus();
+};
+
+class DefaultBonus : public Bonus {
+public:
+    DefaultBonus();
 };
 
 
