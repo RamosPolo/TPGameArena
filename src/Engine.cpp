@@ -19,8 +19,16 @@ Engine::Engine() {
     m_Window.setFramerateLimit(50);
 
     m_BackgroundTexture.loadFromFile("../assets/image/arena_steamPunk.png");
+    // Set le Menu
+    m_TextureButtonMenu.loadFromFile("../assets/image/start_button.png");
+    m_TextureMenuBackground.loadFromFile("../assets/image/MenuBackground.png");
+    m_Menu.setTextureButton(m_TextureButtonMenu);
+    m_Menu.setTextureBackground(m_TextureMenuBackground);
+    m_Menu.setMenu(m_Window.getSize().x, m_Window.getSize().y);
 
-    // Associate the sprite with the texture
+
+    // background
+    m_BackgroundTexture.loadFromFile("../assets/image/arena_steamPunk.png");
     m_BackgroundSprite.setTexture(m_BackgroundTexture);
 
     // texture des balles
@@ -33,8 +41,6 @@ Engine::Engine() {
     m_bonusTextureFire.loadFromFile("../assets/image/fireRing.png");
     m_bonusTextureSnow.loadFromFile("../assets/image/snowRing.png");
     m_EnemiesTexture.loadFromFile("../assets/image/Golem/Walking.png");
-
-    //m_bonus = Bonus();
 
     m_BonusFactory = BonusFactory();
 
@@ -93,34 +99,38 @@ void Engine::draw()
 {
     // Rub out the last frame
     m_Window.clear(Color::White);
- 
+
     // Draw the background
     m_Window.draw(m_BackgroundSprite);
 
-    // draw le joueur
+    if(!m_Menu.isPlaying()) {
+        // draw le menu
+        m_Window.draw(*m_Menu.getSpriteBackground());
+        m_Window.draw(*m_Menu.getSpriteButton());
+    } else {
+        // draw le joueur
+        if (!m_Player.isDestroyed()) {
+            m_Player.destroy();
+            m_Window.draw(*m_Player.getSprite());
+        }
 
-    if (!m_Player.isDestroyed()) {
-        m_Window.draw(*m_Player.getSprite());
+        for (auto &ennemi : m_Enemies) {
+            m_Window.draw(*ennemi.getSprite());
+        }
+
+        // draw les projectiles
+        for(auto & bullet : bullets) {
+            m_Window.draw(*bullet.getSprite());
+        }
+
+        for (auto & bonus : bonuses) {
+            m_Window.draw(*bonus.getSprite());
+        }
+
+        m_Window.draw(b_barvie.getRectangle());
+
+        DisplayScore();
     }
-
-    for (auto &ennemi : m_Enemies) {
-        m_Window.draw(*ennemi.getSprite());
-    }
-
-    // draw les projectiles
-    for(auto & bullet : bullets) {
-        m_Window.draw(*bullet.getSprite());
-    }
-
-    for (auto & bonus : bonuses) {
-        m_Window.draw(*bonus.getSprite());
-    }
-
-    m_Window.draw(b_barvie.getRectangle()); 
-
-    DisplayScore();
-
- 
     // Show everything we have just drawn
     m_Window.display();
 }
@@ -131,6 +141,12 @@ void Engine::handlePlayer(Event event){
         if (event.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Escape))
         {
             m_Window.close();
+        }
+    }
+
+    if(Mouse::isButtonPressed(Mouse::Left)) {
+        if(m_Menu.isButtonClicked(Mouse::getPosition().x, Mouse::getPosition().y)) {
+            m_Menu.Play();
         }
     }
  
@@ -363,7 +379,7 @@ void Engine::DisplayScore(){
     
     // Load font
     Font font;
-    if (!font.loadFromFile("././assets/font/arial.ttf")) {
+    if (!font.loadFromFile("../assets/font/arial.ttf")) {
         // Handle font loading error
     }
 
