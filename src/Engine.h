@@ -12,6 +12,7 @@
 #include "WorkingFile/CollisionManager.h"
 
 #include "./character/Barvie.h"
+#include "Menu/Menu.h"
 
 using namespace sf;
  
@@ -20,7 +21,12 @@ class Engine
 private:
  
     // A regular RenderWindow
-    RenderWindow m_Window;  
+    RenderWindow m_Window;
+
+    // Menu du jeu
+    Texture m_TextureButtonMenu;
+    Texture m_TextureMenuBackground;
+    Menu m_Menu;
 
 
     // Score et temps de jeu
@@ -45,8 +51,6 @@ private:
 
     // texture characters
     Texture m_EnemiesTexture;
-
-
 
     //Monster
     std::vector<Monster> m_Enemies;
