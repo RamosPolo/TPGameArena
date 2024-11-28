@@ -15,6 +15,7 @@ protected:
     Vector2f m_Position;
     //Sprite* m_Sprite = this->getSprite();
     Texture m_Texture;
+    float m_scaleFactor;
 
     bool m_LeftPressed = false;
     bool m_RightPressed = false;
@@ -26,12 +27,13 @@ protected:
     int m_FrameHeight = 0;
     bool m_IsFacingRight = true;
 
+
     static const Texture& getDefaultTexture();
 
 public:
     Character() = default;
 
-    Character(float speed, int life);
+    Character(float speed, int life, float scaleFactor);
 
     void setLife(int nb);
     void getDemage(int nb);

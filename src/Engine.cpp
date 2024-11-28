@@ -44,12 +44,16 @@ Engine::Engine() {
     m_BonusFactory = BonusFactory();
 
     m_EnemiesTexture.loadFromFile("./assets/image/Golem/Walking.png");
+
+
 }
 
 void Engine::start()
 {
     // Timing
     Clock clock;
+
+    startMusic();
  
     while (m_Window.isOpen())
     {
@@ -81,12 +85,7 @@ void Engine::update(float dtAsSeconds)
 
     gererCollision();
 
-    if (m_Enemies.size() == 0 && m_NumWave < 5  ) {
-        m_Enemies = sm_SpawnerMonster.generateWave(m_NumWave);
-        m_NumWave = m_NumWave + 1;
-    }
-
-
+    updateWave();
     updatePlayer(dtAsSeconds, windowWidth, windowHeight);
     updateEnemies(dtAsSeconds, windowWidth, windowHeight);
     updateBullets(dtAsSeconds, windowWidth, windowHeight);
@@ -200,6 +199,57 @@ void Engine::addBullet(Bullet bullet) {
     bullets.emplace_back(bullet);
 }
 
+void Engine::startMusic(){
+    if (!m_BackgroundMusic.openFromFile("./assets/audio/background_music.ogg")) {
+        throw std::runtime_error("Impossible de charger la musique de fond");
+    }
+    m_BackgroundMusic.setVolume(50);
+    m_BackgroundMusic.setLoop(true);
+    m_BackgroundMusic.play();
+   
+
+}
+
+void Engine::updateWave() {
+    static std::vector<Monster> pendingEnemies; 
+    static sf::Clock enemySpawnClock;           
+    static sf::Clock waveForceClock;            
+
+    // Définir les paramètres
+    float spawnInterval = 1.0f;                 
+    float forceWaveInterval = 15.0f;           
+
+    // Vérifier si on doit générer une nouvelle vague
+    bool tempsEcoule = t_timeWave.getElapsedTime().asSeconds() >= 10.0f * m_NumWave;
+    bool forceNouvelleVague = waveForceClock.getElapsedTime().asSeconds() >= forceWaveInterval;
+    bool resteVague = m_NumWave < 10;
+
+    // Si le temps écoulé ou condition forcée et qu'il reste des vagues à générer
+    if ((tempsEcoule || forceNouvelleVague) && resteVague && pendingEnemies.empty()) {
+        m_NumWave += 1;
+
+        // Génère une nouvelle vague d'ennemis et les place dans le stock temporaire
+        pendingEnemies = sm_SpawnerMonster.generateWave(m_NumWave);
+
+        // Réinitialiser les chronomètres
+        t_timeWave.restart();
+        waveForceClock.restart();
+        enemySpawnClock.restart();
+    }
+
+    // Si des ennemis sont en attente et que le délai entre chaque ajout est respecté
+    if (!pendingEnemies.empty() && enemySpawnClock.getElapsedTime().asSeconds() >= spawnInterval) {
+        // Ajouter un ennemi à la liste principale
+        m_Enemies.push_back(std::move(pendingEnemies.front()));
+        pendingEnemies.erase(pendingEnemies.begin());
+        enemySpawnClock.restart();
+    }
+}
+
+
+
+
+
 void Engine::gererCollision() {
     // gérer collsion avec les bullets
     bullets.erase(std::remove_if(bullets.begin(), bullets.end(), [](const Bullet& tir) {
@@ -250,6 +300,7 @@ void Engine::CollisionHandler() {
                     m_Player.getDemage(1); 
                     if (m_Player.getLife() == 0) {
                         m_Player.destroy();
+                        m_BackgroundMusic.stop();
                     } else {
                         c_damageClock.restart(); 
                     }

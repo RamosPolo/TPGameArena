@@ -5,15 +5,15 @@
 #include <cstdlib>
 #include <ctime>
 
-Monster::Monster(float speed, const sf::Texture& texture, int life)
-    : Character(speed, life) {
+Monster::Monster(float speed, const sf::Texture& texture, int life, float scaleFactor)
+    : Character(speed, life, scaleFactor) {
 
     // Définir la taille initiale des frames (doit correspondre à celles utilisées dans updateSprite)
     m_FrameWidth = 430;  // Largeur de chaque frame
     m_FrameHeight = 600; // Hauteur de chaque frame
 
     m_Texture = texture; // Associer la texture
-    m_scaleFactor = 0.2f; // Facteur de mise à l'échelle du sprite
+    m_scaleFactor = scaleFactor; // Facteur de mise à l'échelle du sprite
 
     // Configurer le sprite avec la texture
     this->getSprite()->setTexture(texture);

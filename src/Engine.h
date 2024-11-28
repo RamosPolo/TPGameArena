@@ -15,6 +15,9 @@
 #include "./character/monster/SpawnerMonster.h"
 #include "Menu/Menu.h"
 
+#include <SFML/Audio.hpp> 
+
+
 using namespace sf;
  
 class Engine
@@ -34,7 +37,6 @@ private:
     int p_Score = 0;  
     sf::Clock j_timePlay;
     sf::Clock t_timeWave;
-
     void DisplayScore();
 
  
@@ -55,16 +57,22 @@ private:
     // texture characters
     Texture m_EnemiesTexture;
 
+    // music
+    sf::Music m_BackgroundMusic;
+    void startMusic();
+
+
     //Monster
     SpawnerMonster sm_SpawnerMonster;
     std::vector<Monster> m_Enemies;
-    int m_NumWave = 1;
+    int m_NumWave = 0;
     bool isCollisionBetweenMonsters(const Monster& m1, const Monster& m2);
     void updateEnemies(float dtAsSeconds, unsigned int windowWidth, unsigned int windowHeight);
+    void updateWave();
 
 
     // player
-    Player m_Player = Player(400.0f, 5);
+    Player m_Player = Player(400.0f, 5, 0.4f);
     Barvie b_barvie = Barvie(m_Player);
     void updatePlayer(float dtAsSeconds, int windowWidth, int windowHeight);
     void handlePlayer(Event event);

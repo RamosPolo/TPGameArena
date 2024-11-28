@@ -1,7 +1,7 @@
 #include "Character.h"
 
-Character::Character(float speed, int life)
-    : m_Speed(speed), m_life(life), m_Position(0, 0), m_IsFacingRight(true) {
+Character::Character(float speed, int life, float scaleFactor)
+    : m_Speed(speed), m_life(life), m_Position(0, 0), m_scaleFactor(0.4f), m_IsFacingRight(true) {
     this->getSprite()->setTexture(getDefaultTexture());
 }
 
@@ -26,7 +26,7 @@ const Texture& Character::getDefaultTexture() {
     static Texture defaultTexture;
     static bool isLoaded = false;
     if (!isLoaded) {
-        if (!defaultTexture.loadFromFile("../assets/image/Wraith.png")) {
+        if (!defaultTexture.loadFromFile("./assets/image/Wraith.png")) {
             std::cerr << "Erreur : Impossible de charger la texture par défaut." << std::endl;
         }
         isLoaded = true;

@@ -7,7 +7,7 @@
 class Monster : public Character {
 public:
     Monster() = default;
-    Monster(float speed, const sf::Texture& texture, int life);
+    Monster(float speed, const sf::Texture& texture, int life, float scaleFactor);
 
     // Méthode d'update spécifique pour le monstre
     void update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight, int positionPlayerX, int positionPlayerY);

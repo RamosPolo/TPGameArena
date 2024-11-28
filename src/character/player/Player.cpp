@@ -1,8 +1,8 @@
 #include "Player.h"
 #include <iostream>
 
-Player::Player(float speed, int life)
-    : Character(speed, life) {
+Player::Player(float speed, int life, float scaleFactor)
+    : Character(speed, life, scaleFactor) {
 
         m_FrameWidth = 520;
         m_FrameHeight = 420;
@@ -19,7 +19,7 @@ Player::Player(float speed, int life)
     // Initialisation du sprite
     this->getSprite()->setTexture(m_Texture);
     this->getSprite()->setTextureRect(sf::IntRect(x, y, newFrameWidth, newFrameHeight));
-    this->getSprite()->setScale(0.4f, 0.4f);
+    this->getSprite()->setScale(m_scaleFactor, m_scaleFactor);
 
     // Position initiale
     m_Position = {500, 800};
