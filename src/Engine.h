@@ -26,6 +26,7 @@ private:
     // Score et temps de jeu
     int p_Score = 0;  
     sf::Clock j_timePlay;
+    void DisplayScore();
 
  
     // Declare a sprite and a Texture for the background
@@ -52,6 +53,13 @@ private:
     bool isCollisionBetweenMonsters(const Monster& m1, const Monster& m2);
     void updateEnemies(float dtAsSeconds, unsigned int windowWidth, unsigned int windowHeight);
 
+
+    // player
+    Player m_Player = Player(400.0f, 5);
+    Barvie b_barvie = Barvie();
+    void updatePlayer(float dtAsSeconds, int windowWidth, int windowHeight);
+    void handlePlayer(Event event);
+
     // Collisions
     CollisionManager m_CollisionManager;
     sf::Clock c_damageClock;
@@ -60,17 +68,15 @@ private:
 
     // listes des bullets
     std::vector<Bullet> bullets;
+    void updateBullets(float dtAsSeconds, int windowWidth, int windowHeight);
+    void handleBullet();
+
 
     // Slot Bonus du joueur
     Bonus m_bonus;
     std::vector<Bonus> bonuses;
     Clock m_BonusClock;
     Time spawnIntervalBonus = seconds(7.f); // 7 secondes
-
-    // player
-    Player m_Player = Player(400.0f, 5);
-
-    Barvie b_barvie = Barvie();
 
 
     // les Obstacles

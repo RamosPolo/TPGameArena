@@ -43,7 +43,6 @@ Engine::Engine() {
 
     for (int i = 0; i < 10; ++i) {
         Monster* monster = new Monster(100.f, m_EnemiesTexture, 100);
-        // m_CollisionManager.AddObject(monster);
         m_Enemies.push_back(*monster);
     }
 }
@@ -70,7 +69,65 @@ void Engine::start()
 void Engine::input() {
     
     Event event;
-    while (m_Window.pollEvent(event)) // Gestion des événements
+
+    handlePlayer(event);
+    handleBullet();
+    CollisionHandler();
+}
+
+void Engine::update(float dtAsSeconds)
+{
+    unsigned int windowWidth = m_Window.getSize().x;
+    unsigned int windowHeight = m_Window.getSize().y;
+
+    gererCollision();
+
+    updatePlayer(dtAsSeconds, windowWidth, windowHeight);
+    updateEnemies(dtAsSeconds, windowWidth, windowHeight);
+    updateBullets(dtAsSeconds, windowWidth, windowHeight);
+
+}
+
+
+void Engine::draw()
+{
+    // Rub out the last frame
+    m_Window.clear(Color::White);
+ 
+    // Draw the background
+    m_Window.draw(m_BackgroundSprite);
+
+    // draw le joueur
+
+    if (!m_Player.isDestroyed()) {
+        m_Player.destroy();
+        m_Window.draw(*m_Player.getSprite());
+    }
+
+    for (auto &ennemi : m_Enemies) {
+        m_Window.draw(*ennemi.getSprite());
+    }
+
+    // draw les projectiles
+    for(auto & bullet : bullets) {
+        m_Window.draw(*bullet.getSprite());
+    }
+
+    for (auto & bonus : bonuses) {
+        m_Window.draw(*bonus.getSprite());
+    }
+
+    m_Window.draw(b_barvie.getRectangle()); 
+
+    DisplayScore();
+
+ 
+    // Show everything we have just drawn
+    m_Window.display();
+}
+
+void Engine::handlePlayer(Event event){
+        while (m_Window.pollEvent(event)) // Gestion des événements
     {
         if (event.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Escape))
         {
@@ -110,6 +167,9 @@ void Engine::input() {
         m_Player.stopDown();
     }
 
+}
+
+void Engine::handleBullet(){
     if( (Mouse::isButtonPressed(Mouse::Left)
         || Keyboard::isKeyPressed(Keyboard::Space))
         && m_BulletClock.getElapsedTime().asSeconds() >= m_BulletCooldown) {
@@ -121,78 +181,6 @@ void Engine::input() {
     if (m_BonusClock.getElapsedTime() >= spawnIntervalBonus) {
         BonusHandler();
     }
-
-    CollisionHandler();
-}
-
-void Engine::draw()
-{
-    // Rub out the last frame
-    m_Window.clear(Color::White);
- 
-    // Draw the background
-    m_Window.draw(m_BackgroundSprite);
-
-    // draw le joueur
-
-    if (!m_Player.isDestroyed()) {
-        m_Window.draw(*m_Player.getSprite());
-    }
-
-    for (auto &ennemi : m_Enemies) {
-        m_Window.draw(*ennemi.getSprite());
-    }
-
-
-    //m_ObstacleFactory.drawObstacles(m_Window);
-
-    // draw les projectiles
-    for(auto & bullet : bullets) {
-        m_Window.draw(*bullet.getSprite());
-    }
-
-    for (auto & bonus : bonuses) {
-        m_Window.draw(*bonus.getSprite());
-    }
-
-    m_Window.draw(b_barvie.getRectangle()); 
-
- 
-    // Show everything we have just drawn
-    m_Window.display();
-}
-
-void Engine::update(float dtAsSeconds)
-{
-    unsigned int windowWidth = m_Window.getSize().x;
-    unsigned int windowHeight = m_Window.getSize().y;
-
-    // Engine::gererCollsion() -> gère les collisions
-    gererCollision();
-
-    m_Player.update(dtAsSeconds, windowWidth, windowHeight);
-    b_barvie.update(m_Player);
-    
-    // for (auto &ennemi : m_Enemies) {
-    //     ennemi.update(dtAsSeconds, windowWidth, windowHeight, m_Player.getPositionX(), m_Player.getPositionY());
-    // }
-
-    updateEnemies(dtAsSeconds, windowWidth, windowHeight);
-
-    // Mise à jour des projectiles
-    auto it = bullets.begin();
-    while (it != bullets.end()) {
-        // on bouge le projectile
-        it->move(dtAsSeconds);
-
-        // Vérifiez si le projectile est hors de l'écran
-        if (it->isOutOfBounds(windowWidth, windowHeight)) {
-            it = bullets.erase(it); // Supprime le projectile
-            } else {
-                ++it;
-            }
-    }
-
 }
 
 void Engine::addBullet(Bullet bullet) {
@@ -225,6 +213,7 @@ void Engine::CollisionHandler() {
             if (tir.getSprite()->getGlobalBounds().intersects(ennemi.getSprite()->getGlobalBounds())) {
                 if(ennemi.getLife() <= 0) {
                     ennemi.destroy();
+                    p_Score += 10;
                 } else {
                     ennemi.getDemage(25);
                 }
@@ -314,6 +303,10 @@ bool Engine::isCollisionBetweenMonsters(const Monster& m1, const Monster& m2) {
     return xOverlap && yOverlap;
 }
 
+/////////////
+// UPDATE //
+////////////
+
 void Engine::updateEnemies(float dtAsSeconds, unsigned int windowWidth, unsigned int windowHeight) {
     for (size_t i = 0; i < m_Enemies.size(); ++i) {
         // Mise à jour de chaque ennemi
@@ -341,6 +334,72 @@ void Engine::updateEnemies(float dtAsSeconds, unsigned int windowWidth, unsigned
             }
         }
     }
+}
+
+void Engine::updatePlayer(float dtAsSeconds, int windowWidth, int windowHeight){
+    m_Player.update(dtAsSeconds, windowWidth, windowHeight);
+    b_barvie.update(m_Player);
+}
+
+// Mise à jour des projectiles
+void Engine::updateBullets(float dtAsSeconds, int windowWidth, int windowHeight){
+    auto it = bullets.begin();
+    while (it != bullets.end()) {
+        // on bouge le projectile
+        it->move(dtAsSeconds);
+
+        // Vérifiez si le projectile est hors de l'écran
+        if (it->isOutOfBounds(windowWidth, windowHeight)) {
+            it = bullets.erase(it); // Supprime le projectile
+            } else {
+                ++it;
+            }
+    }
+}
+
+
+void Engine::DisplayScore(){
+    
+    // Load font
+    Font font;
+    if (!font.loadFromFile("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf")) {
+        // Handle font loading error
+    }
+
+    // Score display
+    sf::Text scoreText;
+    scoreText.setFont(font);
+    scoreText.setString("Score: " + std::to_string(p_Score));
+    scoreText.setCharacterSize(48);
+    scoreText.setFillColor(sf::Color::White);
+    scoreText.setPosition(m_Window.getSize().x - 300, 10);
+
+    // Add black background rectangle for better readability
+    sf::RectangleShape scoreBackground(sf::Vector2f(scoreText.getLocalBounds().width + 20, scoreText.getLocalBounds().height + 30));
+    scoreBackground.setFillColor(sf::Color::Black);
+    scoreBackground.setPosition(scoreText.getPosition().x - 10, scoreText.getPosition().y - 5);
+    m_Window.draw(scoreBackground);
+
+    // Draw score text
+    m_Window.draw(scoreText);
+
+    // Time display
+    float elapsedTime = j_timePlay.getElapsedTime().asSeconds();
+    sf::Text timeText;
+    timeText.setFont(font);
+    timeText.setString("Time: " + std::to_string(static_cast<int>(elapsedTime)) + "s");
+    timeText.setCharacterSize(48);
+    timeText.setFillColor(sf::Color::White);
+    timeText.setPosition(m_Window.getSize().x - 300, 90);
+
+    // Add black background rectangle for better readability
+    sf::RectangleShape timeBackground(sf::Vector2f(timeText.getLocalBounds().width + 20, timeText.getLocalBounds().height + 30));
+    timeBackground.setFillColor(sf::Color::Black);
+    timeBackground.setPosition(timeText.getPosition().x - 10, timeText.getPosition().y - 5);
+    m_Window.draw(timeBackground);
+
+    // Draw time text
+    m_Window.draw(timeText);
 }
 
 
