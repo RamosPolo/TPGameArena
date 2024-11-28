@@ -13,7 +13,7 @@ Monster::Monster(float speed, const sf::Texture& texture, int life)
     m_FrameHeight = 600; // Hauteur de chaque frame
 
     m_Texture = texture; // Associer la texture
-    m_scaleFactor = 0.3f; // Facteur de mise à l'échelle du sprite
+    m_scaleFactor = 0.2f; // Facteur de mise à l'échelle du sprite
 
     // Configurer le sprite avec la texture
     this->getSprite()->setTexture(texture);

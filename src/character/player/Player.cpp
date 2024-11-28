@@ -19,7 +19,7 @@ Player::Player(float speed, int life)
     // Initialisation du sprite
     this->getSprite()->setTexture(m_Texture);
     this->getSprite()->setTextureRect(sf::IntRect(x, y, newFrameWidth, newFrameHeight));
-    this->getSprite()->setScale(0.5f, 0.5f);
+    this->getSprite()->setScale(0.4f, 0.4f);
 
     // Position initiale
     m_Position = {500, 800};
@@ -63,11 +63,11 @@ void Player::updateSprite() {
     // Inverser l'échelle si nécessaire
     if (m_RightPressed && !m_IsFacingRight) {
         m_IsFacingRight = true;
-        this->getSprite()->setScale(0.5f, 0.5f);
+        this->getSprite()->setScale(0.4f, 0.4f);
         this->getSprite()->setOrigin(0, 0);
     } else if (m_LeftPressed && m_IsFacingRight) {
         m_IsFacingRight = false;
-        this->getSprite()->setScale(-0.5f, 0.5f);
+        this->getSprite()->setScale(-0.4f, 0.4f);
         this->getSprite()->setOrigin(m_FrameWidth - 300, 0);
     }
 }

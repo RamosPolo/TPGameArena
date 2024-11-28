@@ -38,13 +38,7 @@ Engine::Engine() {
 
     m_BonusFactory = BonusFactory();
 
-    m_EnemiesTexture.loadFromFile("../assets/image/Golem/Walking.png");
-    b_barvie = Barvie(m_Player);
-
-    for (int i = 0; i < 10; ++i) {
-        Monster* monster = new Monster(100.f, m_EnemiesTexture, 100);
-        m_Enemies.push_back(*monster);
-    }
+    m_EnemiesTexture.loadFromFile("./assets/image/Golem/Walking.png");
 }
 
 void Engine::start()
@@ -82,6 +76,12 @@ void Engine::update(float dtAsSeconds)
 
     gererCollision();
 
+    if (m_Enemies.size() == 0) {
+        m_Enemies = sm_SpawnerMonster.generateWave(m_NumWave);
+        m_NumWave = m_NumWave + 1;
+    }
+
+
     updatePlayer(dtAsSeconds, windowWidth, windowHeight);
     updateEnemies(dtAsSeconds, windowWidth, windowHeight);
     updateBullets(dtAsSeconds, windowWidth, windowHeight);
@@ -100,7 +100,6 @@ void Engine::draw()
     // draw le joueur
 
     if (!m_Player.isDestroyed()) {
-        m_Player.destroy();
         m_Window.draw(*m_Player.getSprite());
     }
 
@@ -211,7 +210,7 @@ void Engine::CollisionHandler() {
     for (auto &tir: bullets) {
         for (auto& ennemi : m_Enemies) {
             if (tir.getSprite()->getGlobalBounds().intersects(ennemi.getSprite()->getGlobalBounds())) {
-                if(ennemi.getLife() <= 0) {
+                if(ennemi.getLife() - tir.demage() <= 0) {
                     ennemi.destroy();
                     p_Score += 10;
                 } else {
@@ -233,11 +232,13 @@ void Engine::CollisionHandler() {
     for (auto& b : m_Enemies) {
         if (m_Player.getSprite()->getGlobalBounds().intersects(b.getSprite()->getGlobalBounds())) {
             if (c_damageClock.getElapsedTime().asSeconds() >= 1.0f) {
-                if (m_Player.getLife() <= 0) {
-                    m_Player.destroy();
-                } else {
+                if(m_Player.getLife() >= 1){
                     m_Player.getDemage(1); 
-                    c_damageClock.restart(); 
+                    if (m_Player.getLife() == 0) {
+                        m_Player.destroy();
+                    } else {
+                        c_damageClock.restart(); 
+                    }
                 }
             }
         }
@@ -374,7 +375,7 @@ void Engine::DisplayScore(){
     scoreText.setFillColor(sf::Color::White);
     scoreText.setPosition(m_Window.getSize().x - 300, 10);
 
-    // Add black background rectangle for better readability
+    // Add black background rectangle for Score
     sf::RectangleShape scoreBackground(sf::Vector2f(scoreText.getLocalBounds().width + 20, scoreText.getLocalBounds().height + 30));
     scoreBackground.setFillColor(sf::Color::Black);
     scoreBackground.setPosition(scoreText.getPosition().x - 10, scoreText.getPosition().y - 5);
@@ -392,7 +393,7 @@ void Engine::DisplayScore(){
     timeText.setFillColor(sf::Color::White);
     timeText.setPosition(m_Window.getSize().x - 300, 90);
 
-    // Add black background rectangle for better readability
+    // Add black background rectangle for Time
     sf::RectangleShape timeBackground(sf::Vector2f(timeText.getLocalBounds().width + 20, timeText.getLocalBounds().height + 30));
     timeBackground.setFillColor(sf::Color::Black);
     timeBackground.setPosition(timeText.getPosition().x - 10, timeText.getPosition().y - 5);
@@ -400,6 +401,21 @@ void Engine::DisplayScore(){
 
     // Draw time text
     m_Window.draw(timeText);
+
+    // Wave display
+    sf::Text waveText;
+    waveText.setFont(font);
+    waveText.setString("Vague: " + std::to_string(m_NumWave - 1));
+    waveText.setCharacterSize(48);
+    waveText.setFillColor(sf::Color::White);
+    waveText.setPosition(m_Window.getSize().x - 300, 170);
+
+    // Add black background rectangle for Wave
+    sf::RectangleShape waveBackground(sf::Vector2f(waveText.getLocalBounds().width + 20, waveText.getLocalBounds().height + 30));
+    waveBackground.setFillColor(sf::Color::Black);
+    waveBackground.setPosition(waveText.getPosition().x - 10, waveText.getPosition().y - 5);
+    m_Window.draw(waveBackground);
+    m_Window.draw(waveText);
 }
 
 
