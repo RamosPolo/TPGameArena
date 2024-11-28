@@ -110,7 +110,6 @@ void Engine::draw()
     } else {
         // draw le joueur
         if (!m_Player.isDestroyed()) {
-            m_Player.destroy();
             m_Window.draw(*m_Player.getSprite());
         }
 
