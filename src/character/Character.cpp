@@ -42,16 +42,12 @@ void Character::getDemage(int nb) {
     this->setLife(this->getLife() - nb);
 }
 
-Sprite* Character::getSpriteC()  {
-    return this->getSprite();
-}
-
 int Character::getSpriteHeight() const  {
-    return m_Sprite->getGlobalBounds().height;
+    return this->o_sprite.getGlobalBounds().height;
 }
 
 int Character::getSpriteWidth() const{
-    return m_Sprite->getGlobalBounds().width;
+    return this->o_sprite.getGlobalBounds().width;
 }
 
 void Character::moveLeft() { m_LeftPressed = true; }

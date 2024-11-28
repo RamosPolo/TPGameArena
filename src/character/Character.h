@@ -13,7 +13,7 @@ protected:
     float m_Speed = 0.f;
     int m_life = 0;
     Vector2f m_Position;
-    Sprite* m_Sprite = this->getSprite();
+    //Sprite* m_Sprite = this->getSprite();
     Texture m_Texture;
 
     bool m_LeftPressed = false;
@@ -37,14 +37,13 @@ public:
     void getDemage(int nb);
 
     // Accesseurs
-    //Sprite* getSprite();
     float getPositionX() const;
     float getPositionY() const;
     void setTexture(const Texture& texture);
     int getLife() const;
-    Sprite* getSpriteC();
     int getSpriteHeight() const;
     int getSpriteWidth() const;
+
 
 
     // Mouvement générique

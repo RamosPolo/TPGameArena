@@ -10,7 +10,7 @@
 using namespace sf;
 
 class GameObject {
-private:
+protected:
     Sprite o_sprite;
     // types différents :
     // - monster (ennemies)

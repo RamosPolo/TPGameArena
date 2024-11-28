@@ -21,6 +21,12 @@ private:
  
     // A regular RenderWindow
     RenderWindow m_Window;  
+
+
+    // Score et temps de jeu
+    int p_Score = 0;  
+    sf::Clock j_timePlay;
+
  
     // Declare a sprite and a Texture for the background
     Sprite m_BackgroundSprite;
@@ -40,10 +46,16 @@ private:
     Texture m_EnemiesTexture;
 
 
+
+    //Monster
     std::vector<Monster> m_Enemies;
+    bool isCollisionBetweenMonsters(const Monster& m1, const Monster& m2);
+    void updateEnemies(float dtAsSeconds, unsigned int windowWidth, unsigned int windowHeight);
 
     // Collisions
     CollisionManager m_CollisionManager;
+    sf::Clock c_damageClock;
+
 
 
     // listes des bullets

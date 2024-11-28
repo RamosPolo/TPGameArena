@@ -70,8 +70,8 @@ void Monster::update(float elapsedTime, unsigned int windowWidth, unsigned int w
         }
 
         // Mise à jour de la position
-         m_Position.x += deltaX * m_Speed * elapsedTime;
-          m_Position.y += deltaY * m_Speed * elapsedTime;
+        Move(deltaX * m_Speed * elapsedTime, deltaY * m_Speed * elapsedTime);
+
     }
 
     // Vérification des limites de la fenêtre
@@ -114,4 +114,9 @@ void Monster::updateSprite() {
         this->getSprite()->setScale(-m_scaleFactor, m_scaleFactor);
         this->getSprite()->setOrigin(m_FrameWidth, 0);
     }
+}
+
+void Monster::Move(float x, float y){
+         m_Position.x += x;
+         m_Position.y += y;
 }

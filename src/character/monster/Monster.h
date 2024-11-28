@@ -15,6 +15,8 @@ public:
     // Mise à jour du sprite du monstre
     void updateSprite() override;
 
+    void Move(float x, float y);
+
 private:
     void positionnerSurBord();
     float m_scaleFactor;

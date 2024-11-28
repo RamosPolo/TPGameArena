@@ -11,9 +11,8 @@ public:
 
     void update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight);
     void updateSprite() override;
-
-private:
-    sf::Texture m_Texture;      
+     
 };
 
 #endif
+

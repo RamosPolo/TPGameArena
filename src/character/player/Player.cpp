@@ -24,6 +24,7 @@ Player::Player(float speed, int life)
     // Position initiale
     m_Position = {500, 800};
     this->getSprite()->setPosition(m_Position);
+
 }
 
 void Player::update(float elapsedTime, unsigned int windowWidth, unsigned int windowHeight) {

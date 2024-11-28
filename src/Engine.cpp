@@ -4,6 +4,8 @@
 #include "Obstacles/Obstacle.h"
 #include "./character/Barvie.h"
 
+#include <cmath> 
+
 Engine::Engine() {
     // Get the screen resolution and create an SFML window and View
     Vector2f resolution;
@@ -39,7 +41,7 @@ Engine::Engine() {
     m_EnemiesTexture.loadFromFile("../assets/image/Golem/Walking.png");
     b_barvie = Barvie(m_Player);
 
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 10; ++i) {
         Monster* monster = new Monster(100.f, m_EnemiesTexture, 100);
         // m_CollisionManager.AddObject(monster);
         m_Enemies.push_back(*monster);
@@ -133,7 +135,9 @@ void Engine::draw()
 
     // draw le joueur
 
-    m_Window.draw(*m_Player.getSprite());
+    if (!m_Player.isDestroyed()) {
+        m_Window.draw(*m_Player.getSprite());
+    }
 
     for (auto &ennemi : m_Enemies) {
         m_Window.draw(*ennemi.getSprite());
@@ -169,9 +173,11 @@ void Engine::update(float dtAsSeconds)
     m_Player.update(dtAsSeconds, windowWidth, windowHeight);
     b_barvie.update(m_Player);
     
-    for (auto &ennemi : m_Enemies) {
-        ennemi.update(dtAsSeconds, windowWidth, windowHeight, m_Player.getPositionX(), m_Player.getPositionY());
-    }
+    // for (auto &ennemi : m_Enemies) {
+    //     ennemi.update(dtAsSeconds, windowWidth, windowHeight, m_Player.getPositionX(), m_Player.getPositionY());
+    // }
+
+    updateEnemies(dtAsSeconds, windowWidth, windowHeight);
 
     // Mise à jour des projectiles
     auto it = bullets.begin();
@@ -235,13 +241,15 @@ void Engine::CollisionHandler() {
         }
     }
 
-    // Collision Ennemies - Player
     for (auto& b : m_Enemies) {
         if (m_Player.getSprite()->getGlobalBounds().intersects(b.getSprite()->getGlobalBounds())) {
-            if(m_Player.getLife() <= 0 ) {
-                m_Player.destroy();
-            } else {
-                m_Player.getDemage(1);
+            if (c_damageClock.getElapsedTime().asSeconds() >= 1.0f) {
+                if (m_Player.getLife() <= 0) {
+                    m_Player.destroy();
+                } else {
+                    m_Player.getDemage(1); 
+                    c_damageClock.restart(); 
+                }
             }
         }
     }
@@ -287,4 +295,54 @@ Bullet Engine::createBullet(String t, float posJX, float posJY, float posMX, flo
     return bul;
 
 }
+
+bool Engine::isCollisionBetweenMonsters(const Monster& m1, const Monster& m2) {
+    float x1 = m1.getPositionX();
+    float y1 = m1.getPositionY();
+    float width1 = m1.getSpriteWidth();
+    float height1 = m1.getSpriteHeight();
+
+    float x2 = m2.getPositionX();
+    float y2 = m2.getPositionY();
+    float width2 = m2.getSpriteWidth();
+    float height2 = m2.getSpriteHeight();
+
+    // Vérifier si les rectangles se chevauchent
+    bool xOverlap = (x1 < x2 + width2) && (x1 + width1 > x2);
+    bool yOverlap = (y1 < y2 + height2) && (y1 + height1 > y2);
+
+    return xOverlap && yOverlap;
+}
+
+void Engine::updateEnemies(float dtAsSeconds, unsigned int windowWidth, unsigned int windowHeight) {
+    for (size_t i = 0; i < m_Enemies.size(); ++i) {
+        // Mise à jour de chaque ennemi
+        m_Enemies[i].update(dtAsSeconds, windowWidth, windowHeight, m_Player.getPositionX(), m_Player.getPositionY());
+
+        // Vérification des collisions avec les autres ennemis
+        for (size_t j = i + 1; j < m_Enemies.size(); ++j) {
+            if (isCollisionBetweenMonsters(m_Enemies[i], m_Enemies[j])) {
+                // Calcul de la direction et de la distance entre les deux monstres
+                float dx = m_Enemies[j].getPositionX() - m_Enemies[i].getPositionX();
+                float dy = m_Enemies[j].getPositionY() - m_Enemies[i].getPositionY();
+                float distance = std::sqrt(dx * dx + dy * dy);
+
+                if (distance > 0) {
+                    // Normalisation du vecteur direction
+                    float invDistance = 1.0f / distance;
+                    float nx = dx * invDistance;
+                    float ny = dy * invDistance;
+
+                    // Éloignement des monstres pour éviter qu'ils se chevauchent
+                    float overlap = 0.5f; // Facteur d'éloignement ajustable
+                    m_Enemies[i].Move(-nx * overlap, -ny * overlap);
+                    m_Enemies[j].Move(nx * overlap, ny * overlap);
+                }
+            }
+        }
+    }
+}
+
+
+
 
