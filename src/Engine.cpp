@@ -27,7 +27,7 @@ Engine::Engine() {
 
 
     // background
-    m_BackgroundTexture.loadFromFile("../assets/image/arena_steamPunk.png");
+    m_BackgroundTexture.loadFromFile("../assets/image/background.jpg");
     m_BackgroundSprite.setTexture(m_BackgroundTexture);
 
     // texture des balles

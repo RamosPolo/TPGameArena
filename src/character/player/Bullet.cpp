@@ -55,19 +55,19 @@ bool Bullet::isOutOfBounds(unsigned int windowWidth, unsigned int windowHeight) 
 FireBullet::FireBullet(){
     this->dammage = 35;
     // Initialiser la vitesse
-    this->b_speed = 550;
+    this->b_speed = 650;
 }
 
 SnowBullet::SnowBullet() {
     this->dammage = 25;
     // Initialiser la vitesse
-    this->b_speed = 470;
+    this->b_speed = 550;
 }
 
 DefaultBullet::DefaultBullet() {
     this->dammage = 15;
     // Initialiser la vitesse
-    this->b_speed = 500;
+    this->b_speed = 600;
     this->setType("default");
 }
 

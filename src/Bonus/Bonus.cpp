@@ -30,13 +30,20 @@ DefaultBonus::DefaultBonus() {
 
 void Bonus::positionnerBonus() {
     int windowWidth = 1920, windowHeight = 1080;
-    int bord = std::rand() % 4;  // Positionner aléatoirement sur un bord
+    int margin = 60; // Décalage des bords
+    int bord = std::rand() % 4; // Positionner aléatoirement sur un bord
 
-    if (bord == 0) this->b_position = {50, static_cast<float>(std::rand() % windowHeight)};
-    else if (bord == 1) this->b_position = {static_cast<float>(windowWidth) + 50, static_cast<float>(std::rand() % windowHeight)};
-    else if (bord == 2) this->b_position = {static_cast<float>(std::rand() % windowWidth), 50};
-    else this->b_position = {static_cast<float>(std::rand() % windowWidth), static_cast<float>(windowHeight)+50};
+    if (bord == 0) { // Bord gauche
+        this->b_position = {static_cast<float>(margin), static_cast<float>(std::rand() % (windowHeight - 2 * margin) + margin)};
+    } else if (bord == 1) { // Bord droit
+        this->b_position = {static_cast<float>(windowWidth - margin), static_cast<float>(std::rand() % (windowHeight - 2 * margin) + margin)};
+    } else if (bord == 2) { // Bord haut
+        this->b_position = {static_cast<float>(std::rand() % (windowWidth - 2 * margin) + margin), static_cast<float>(margin)};
+    } else { // Bord bas
+        this->b_position = {static_cast<float>(std::rand() % (windowWidth - 2 * margin) + margin), static_cast<float>(windowHeight - margin)};
+    }
 
+    // Appliquer la position à l'objet
     this->getSprite()->setPosition(this->b_position);
 }
 
