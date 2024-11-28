@@ -96,7 +96,7 @@ private:
 
     // Gérer le temps des projectiles
     Clock m_BulletClock;
-    float m_BulletCooldown = 0.5f; // Modifier pour une fréquence de tir plus élever
+    float m_BulletCooldown = 0.3f; // Modifier pour une fréquence de tir plus élever
  
     // Private functions for internal use only
     void input();
