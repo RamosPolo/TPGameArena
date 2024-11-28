@@ -13,9 +13,10 @@
 
 #include "./character/Barvie.h"
 #include "./character/monster/SpawnerMonster.h"
+#include "Menu/GameOver.h"
 #include "Menu/Menu.h"
 
-#include <SFML/Audio.hpp> 
+#include <SFML/Audio.hpp>
 
 
 using namespace sf;
@@ -31,15 +32,17 @@ private:
     Texture m_TextureButtonMenu;
     Texture m_TextureMenuBackground;
     Menu m_Menu;
+    GameOver m_GameOver;
+    bool m_playing = false;
+    bool game_over = false;
 
 
     // Score et temps de jeu
     int p_Score = 0;  
     sf::Clock j_timePlay;
     sf::Clock t_timeWave;
-    void DisplayScore();
+    float m_FinalTimePlay = 0;
 
- 
     // Declare a sprite and a Texture for the background
     Sprite m_BackgroundSprite;
     Texture m_BackgroundTexture;
@@ -118,6 +121,14 @@ private:
 
     void BonusHandler();
 
+    void DisplayScore();
+
+    void HandleGameOver();
+
+    void drawGameOver();
+
+    void drawMenuStart();
+
     Bullet createBullet(String t, float posJX, float posJY, float posMX, float posMY);
 
     //void checkEnemyCollisions();
@@ -128,5 +139,4 @@ public:
     Engine();
  
     void start();
- 
 };

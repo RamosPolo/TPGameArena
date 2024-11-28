@@ -16,28 +16,16 @@ private:
     Texture menu_BackgroundTexture;
     Sprite menu_BackgroundSprite;
 
-
-    RectangleShape menu_rec;
+    // positions des élements
     Vector2f menu_position;
-
     Vector2f menu_ButtonPosition;
-    Text menu_text;
-    Font menu_font;
-    bool playing = false;
 public:
     Menu();
-    RectangleShape getRectangle();
-    void Play();
-    bool isPlaying() const;
     void setMenu(int WsizeX, int WsizeY);
     void setTextureButton(const Texture &t);
-
     void setTextureBackground(const Texture &t);
-
     Sprite *getSpriteButton();
-
     Sprite *getSpriteBackground();
-
     bool isButtonClicked(float posXMouse, float posYMouse);
 };
 

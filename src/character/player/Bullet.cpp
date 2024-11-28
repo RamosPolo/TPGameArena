@@ -42,10 +42,11 @@ void Bullet::setTarget(float x, float y) {
     }
 }
 
-bool Bullet::isOutOfBounds(unsigned int windowWidth, unsigned int windowHeight) const {
+bool Bullet::isOutOfBounds(unsigned int windowWidth, unsigned int windowHeight) {
+    sf::FloatRect bounds = getSprite()->getGlobalBounds(); // Obtenir les dimensions du sprite
     // Récupérer la position actuelle du projectile
-    float x = b_position.x;
-    float y = b_position.y;
+    float x = bounds.left + bounds.width / 2;
+    float y = bounds.top + bounds.height / 2;
 
     // Vérifier si le projectile est hors des limites de la fenêtre
     return (x < 0 || x > windowWidth || y < 0 || y > windowHeight);

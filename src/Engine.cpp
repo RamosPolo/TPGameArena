@@ -4,7 +4,8 @@
 #include "Obstacles/Obstacle.h"
 #include "./character/Barvie.h"
 
-#include <cmath> 
+#include <cmath>
+#include <sstream>
 
 Engine::Engine() {
     // Get the screen resolution and create an SFML window and View
@@ -21,9 +22,11 @@ Engine::Engine() {
     // Set le Menu
     m_TextureButtonMenu.loadFromFile("../assets/image/start_button.png");
     m_TextureMenuBackground.loadFromFile("../assets/image/MenuBackground.png");
+    m_GameOver.setTextureBGGO(m_TextureMenuBackground);
     m_Menu.setTextureButton(m_TextureButtonMenu);
     m_Menu.setTextureBackground(m_TextureMenuBackground);
     m_Menu.setMenu(m_Window.getSize().x, m_Window.getSize().y);
+    m_GameOver.setGameOver(m_Window.getSize().x, m_Window.getSize().y);
 
 
     // background
@@ -39,13 +42,8 @@ Engine::Engine() {
     m_bonusTextureDefault.loadFromFile("../assets/image/defaultRing.png");
     m_bonusTextureFire.loadFromFile("../assets/image/fireRing.png");
     m_bonusTextureSnow.loadFromFile("../assets/image/snowRing.png");
-    m_EnemiesTexture.loadFromFile("../assets/image/Golem/Walking.png");
 
     m_BonusFactory = BonusFactory();
-
-    m_EnemiesTexture.loadFromFile("./assets/image/Golem/Walking.png");
-
-
 }
 
 void Engine::start()
@@ -54,7 +52,7 @@ void Engine::start()
     Clock clock;
 
     startMusic();
- 
+
     while (m_Window.isOpen())
     {
         // Restart the clock and save the elapsed time into dt
@@ -62,10 +60,20 @@ void Engine::start()
 
         // Make a fraction from the delta time
         float dtAsSeconds = dt.asSeconds();
- 
+
+
+        if(!game_over) {
+            if(!m_playing) {
+                drawMenuStart();
+            } else {
+                update(dtAsSeconds);
+                draw();
+            }
+        }
+        else {
+            drawGameOver();
+        }
         input();
-        update(dtAsSeconds);
-        draw();
     }
 }
 
@@ -101,39 +109,34 @@ void Engine::draw()
     // Draw the background
     m_Window.draw(m_BackgroundSprite);
 
-    if(!m_Menu.isPlaying()) {
-        // draw le menu
-        m_Window.draw(*m_Menu.getSpriteBackground());
-        m_Window.draw(*m_Menu.getSpriteButton());
-    } else {
-        // draw le joueur
-        if (!m_Player.isDestroyed()) {
-            m_Window.draw(*m_Player.getSprite());
-        }
-
-        for (auto &ennemi : m_Enemies) {
-            m_Window.draw(*ennemi.getSprite());
-        }
-
-        // draw les projectiles
-        for(auto & bullet : bullets) {
-            m_Window.draw(*bullet.getSprite());
-        }
-
-        for (auto & bonus : bonuses) {
-            m_Window.draw(*bonus.getSprite());
-        }
-
-        m_Window.draw(b_barvie.getRectangle());
-
-        DisplayScore();
+    // draw le joueur
+    if (!m_Player.isDestroyed()) {
+        m_Window.draw(*m_Player.getSprite());
     }
+
+    for (auto &ennemi : m_Enemies) {
+        m_Window.draw(*ennemi.getSprite());
+    }
+
+    // draw les projectiles
+    for(auto & bullet : bullets) {
+        m_Window.draw(*bullet.getSprite());
+    }
+
+    for (auto & bonus : bonuses) {
+        m_Window.draw(*bonus.getSprite());
+    }
+
+    m_Window.draw(b_barvie.getRectangle());
+
+    DisplayScore();
+
     // Show everything we have just drawn
     m_Window.display();
 }
 
 void Engine::handlePlayer(Event event){
-        while (m_Window.pollEvent(event)) // Gestion des événements
+    while (m_Window.pollEvent(event)) // Gestion des événements
     {
         if (event.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Escape))
         {
@@ -143,7 +146,8 @@ void Engine::handlePlayer(Event event){
 
     if(Mouse::isButtonPressed(Mouse::Left)) {
         if(m_Menu.isButtonClicked(Mouse::getPosition().x, Mouse::getPosition().y)) {
-            m_Menu.Play();
+            m_playing = true;
+            j_timePlay.restart();
         }
     }
  
@@ -185,7 +189,6 @@ void Engine::handleBullet(){
     if( (Mouse::isButtonPressed(Mouse::Left)
         || Keyboard::isKeyPressed(Keyboard::Space))
         && m_BulletClock.getElapsedTime().asSeconds() >= m_BulletCooldown) {
-
         addBullet(createBullet(this->m_bonus.getTypeBonus(), m_Player.getPositionX(), m_Player.getPositionY(), Mouse::getPosition().x, Mouse::getPosition().y));
         m_BulletClock.restart();
     }
@@ -200,24 +203,24 @@ void Engine::addBullet(Bullet bullet) {
 }
 
 void Engine::startMusic(){
-    if (!m_BackgroundMusic.openFromFile("./assets/audio/background_music.ogg")) {
+    if (!m_BackgroundMusic.openFromFile("../assets/audio/background_music.ogg")) {
         throw std::runtime_error("Impossible de charger la musique de fond");
     }
     m_BackgroundMusic.setVolume(50);
     m_BackgroundMusic.setLoop(true);
     m_BackgroundMusic.play();
-   
+
 
 }
 
 void Engine::updateWave() {
-    static std::vector<Monster> pendingEnemies; 
-    static sf::Clock enemySpawnClock;           
-    static sf::Clock waveForceClock;            
+    static std::vector<Monster> pendingEnemies;
+    static sf::Clock enemySpawnClock;
+    static sf::Clock waveForceClock;
 
     // Définir les paramètres
-    float spawnInterval = 1.0f;                 
-    float forceWaveInterval = 15.0f;           
+    float spawnInterval = 1.0f;
+    float forceWaveInterval = 15.0f;
 
     // Vérifier si on doit générer une nouvelle vague
     bool tempsEcoule = t_timeWave.getElapsedTime().asSeconds() >= 10.0f * m_NumWave;
@@ -293,6 +296,7 @@ void Engine::CollisionHandler() {
         }
     }
 
+    // collisions entre Ennemies et Player
     for (auto& b : m_Enemies) {
         if (m_Player.getSprite()->getGlobalBounds().intersects(b.getSprite()->getGlobalBounds())) {
             if (c_damageClock.getElapsedTime().asSeconds() >= 1.0f) {
@@ -300,7 +304,7 @@ void Engine::CollisionHandler() {
                     m_Player.getDemage(1); 
                     if (m_Player.getLife() == 0) {
                         m_Player.destroy();
-                        m_BackgroundMusic.stop();
+                        HandleGameOver();
                     } else {
                         c_damageClock.restart(); 
                     }
@@ -323,7 +327,7 @@ void Engine::BonusHandler() {
         b.setTextureBonus(m_bonusTextureSnow);
     }
     b.getSprite()->scale(Vector2f(0.3f, 0.3f));
-    b.positionnerBonus();
+    b.positionnerBonus(m_Window.getSize().x, m_Window.getSize().y);
     bonuses.push_back(b);
     m_BonusClock.restart();
 }
@@ -367,10 +371,6 @@ bool Engine::isCollisionBetweenMonsters(const Monster& m1, const Monster& m2) {
 
     return xOverlap && yOverlap;
 }
-
-/////////////
-// UPDATE //
-////////////
 
 void Engine::updateEnemies(float dtAsSeconds, unsigned int windowWidth, unsigned int windowHeight) {
     for (size_t i = 0; i < m_Enemies.size(); ++i) {
@@ -480,6 +480,50 @@ void Engine::DisplayScore(){
     waveBackground.setPosition(waveText.getPosition().x - 10, waveText.getPosition().y - 5);
     m_Window.draw(waveBackground);
     m_Window.draw(waveText);
+}
+
+// gère la fin du jeu
+void Engine::HandleGameOver() {
+    m_FinalTimePlay = j_timePlay.getElapsedTime().asSeconds();
+    m_BackgroundMusic.stop();
+    m_Enemies.clear();
+    bonuses.clear();
+    bullets.clear();
+    game_over = true;
+}
+
+void Engine::drawGameOver() {
+    // Rub out the last frame
+    m_Window.clear(Color::White);
+
+    // Draw the background
+    m_Window.draw(m_BackgroundSprite);
+
+    // on affiche le Game Over
+    m_Window.draw(*m_GameOver.getSpriteBackgroundGO());
+    std::ostringstream oss;
+    oss << "\nScore : " << p_Score << "\nVagues : " << m_NumWave << "\nTime : "
+    << m_FinalTimePlay << " s";
+    m_GameOver.setTexte(oss.str());
+    m_Window.draw(m_GameOver.getTitle());
+    m_Window.draw(m_GameOver.getContent());
+
+    m_Window.display();
+}
+
+void Engine::drawMenuStart() {
+    // Rub out the last frame
+    m_Window.clear(Color::White);
+
+    // Draw the background
+    m_Window.draw(m_BackgroundSprite);
+
+    // draw le menu
+    m_Window.draw(*m_Menu.getSpriteBackground());
+    m_Window.draw(*m_Menu.getSpriteButton());
+
+    // Show everything we have just drawn
+    m_Window.display();
 }
 
 

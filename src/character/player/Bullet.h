@@ -29,7 +29,8 @@ public:
 
     void move(float elapsedTime);
     void setTarget(float x, float y);
-    bool isOutOfBounds(unsigned int windowWidth, unsigned int windowHeight) const;
+
+    bool isOutOfBounds(unsigned int windowWidth, unsigned int windowHeight);
 
     int demage() const;
 

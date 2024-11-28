@@ -18,11 +18,11 @@ class Bonus : public GameObject {
         String bonustype;
     public:
     Bonus();
-        void setPosition(Vector2f v);
+        void setPos(float x, float y);
         void setTextureBonus(const Texture &t);
         String getTypeBonus();
 
-        void positionnerBonus();
+        void positionnerBonus(int WinWidth, int WinHeight);
 };
 
 class FireBonus : public Bonus {

@@ -7,18 +7,6 @@
 
 Menu::Menu() = default;
 
-RectangleShape Menu::getRectangle() {
-    return menu_rec;
-}
-
-void Menu::Play() {
-    this->playing = true;
-}
-
-bool Menu::isPlaying() const {
-    return this->playing;
-}
-
 void Menu::setMenu(int WsizeX, int WsizeY) {
     // Dimensions du fond du menu
     this->getSpriteBackground()->scale(sf::Vector2f(1.f, 1.f));
