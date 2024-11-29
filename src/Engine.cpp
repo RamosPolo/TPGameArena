@@ -50,19 +50,17 @@ void Engine::start()
     // Timing
     Clock clock;
 
+
     startMusic();
 
     while (m_Window.isOpen())
     {
-        // Restart the clock and save the elapsed time into dt
         Time dt = clock.restart();
-
-        // Make a fraction from the delta time
         float dtAsSeconds = dt.asSeconds();
 
-
+        // Loop principal
         if(!game_over) {
-            if(!m_playing) {
+            if(!m_playing) { 
                 drawMenuStart();
             } else {
                 update(dtAsSeconds);
@@ -83,6 +81,8 @@ void Engine::input() {
     handlePlayer(event);
     handleBullet();
     CollisionHandler();
+    BonusHandler();
+
 }
 
 void Engine::update(float dtAsSeconds)
@@ -183,17 +183,13 @@ void Engine::handlePlayer(Event event){
 
 }
 
-
+// Gestion des tires du joueur
 void Engine::handleBullet(){
     if( (Mouse::isButtonPressed(Mouse::Left)
         || Keyboard::isKeyPressed(Keyboard::Space))
         && m_BulletClock.getElapsedTime().asSeconds() >= m_BulletCooldown) {
         addBullet(createBullet(this->m_bonus.getTypeBonus(), m_Player.getPositionX(), m_Player.getPositionY(), Mouse::getPosition().x, Mouse::getPosition().y));
         m_BulletClock.restart();
-    }
-
-    if (m_BonusClock.getElapsedTime() >= spawnIntervalBonus) {
-        BonusHandler();
     }
 }
 
@@ -314,21 +310,24 @@ void Engine::CollisionHandler() {
 
 }
 
+// Génere les apparitions des bonus
 void Engine::BonusHandler() {
-    Bonus b = m_BonusFactory.createRandomBonus();
-    if(b.getTypeBonus() == "default") {
-        b.setTextureBonus(m_bonusTextureDefault);
+    if (m_BonusClock.getElapsedTime() >= spawnIntervalBonus) {
+        Bonus b = m_BonusFactory.createRandomBonus();
+        if(b.getTypeBonus() == "default") {
+            b.setTextureBonus(m_bonusTextureDefault);
+        }
+        if(b.getTypeBonus() == "fire") {
+            b.setTextureBonus(m_bonusTextureFire);
+        }
+        if(b.getTypeBonus() == "snow") {
+            b.setTextureBonus(m_bonusTextureSnow);
+        }
+        b.getSprite()->scale(Vector2f(0.3f, 0.3f));
+        b.positionnerBonus(m_Window.getSize().x, m_Window.getSize().y);
+        bonuses.push_back(b);
+        m_BonusClock.restart();
     }
-    if(b.getTypeBonus() == "fire") {
-        b.setTextureBonus(m_bonusTextureFire);
-    }
-    if(b.getTypeBonus() == "snow") {
-        b.setTextureBonus(m_bonusTextureSnow);
-    }
-    b.getSprite()->scale(Vector2f(0.3f, 0.3f));
-    b.positionnerBonus(m_Window.getSize().x, m_Window.getSize().y);
-    bonuses.push_back(b);
-    m_BonusClock.restart();
 }
 
 Bullet Engine::createBullet(String t, float posJX, float posJY, float posMX, float posMY) {
@@ -353,6 +352,7 @@ Bullet Engine::createBullet(String t, float posJX, float posJY, float posMX, flo
 
 }
 
+// Gere la collision entre 2 monstres
 bool Engine::isCollisionBetweenMonsters(const Monster& m1, const Monster& m2) {
     float x1 = m1.getPositionX();
     float y1 = m1.getPositionY();
@@ -371,6 +371,7 @@ bool Engine::isCollisionBetweenMonsters(const Monster& m1, const Monster& m2) {
     return xOverlap && yOverlap;
 }
 
+// Mise à jour des déplacements 
 void Engine::updateEnemies(float dtAsSeconds, unsigned int windowWidth, unsigned int windowHeight) {
     for (size_t i = 0; i < m_Enemies.size(); ++i) {
         // Mise à jour de chaque ennemi
@@ -424,58 +425,55 @@ void Engine::updateBullets(float dtAsSeconds, int windowWidth, int windowHeight)
 
 void Engine::DisplayScore(){
     
-    // Load font
     Font font;
     if (!font.loadFromFile("../assets/font/arial.ttf")) {
         // Handle font loading error
     }
 
-    // Score display
-    sf::Text scoreText;
+    // Score 
+    Text scoreText;
     scoreText.setFont(font);
     scoreText.setString("Score: " + std::to_string(p_Score));
     scoreText.setCharacterSize(48);
-    scoreText.setFillColor(sf::Color::White);
+    scoreText.setFillColor(Color::White);
     scoreText.setPosition(m_Window.getSize().x - 300, 10);
 
-    // Add black background rectangle for Score
-    sf::RectangleShape scoreBackground(sf::Vector2f(scoreText.getLocalBounds().width + 20, scoreText.getLocalBounds().height + 30));
-    scoreBackground.setFillColor(sf::Color::Black);
+    // Le background rectangle pour le Score
+    RectangleShape scoreBackground(Vector2f(scoreText.getLocalBounds().width + 20, scoreText.getLocalBounds().height + 30));
+    scoreBackground.setFillColor(Color::Black);
     scoreBackground.setPosition(scoreText.getPosition().x - 10, scoreText.getPosition().y - 5);
     m_Window.draw(scoreBackground);
 
-    // Draw score text
     m_Window.draw(scoreText);
 
-    // Time display
+    // Temps de jeu
     float elapsedTime = j_timePlay.getElapsedTime().asSeconds();
-    sf::Text timeText;
+    Text timeText;
     timeText.setFont(font);
     timeText.setString("Time: " + std::to_string(static_cast<int>(elapsedTime)) + "s");
     timeText.setCharacterSize(48);
-    timeText.setFillColor(sf::Color::White);
+    timeText.setFillColor(Color::White);
     timeText.setPosition(m_Window.getSize().x - 300, 90);
 
-    // Add black background rectangle for Time
-    sf::RectangleShape timeBackground(sf::Vector2f(timeText.getLocalBounds().width + 20, timeText.getLocalBounds().height + 30));
-    timeBackground.setFillColor(sf::Color::Black);
+    // Background rectangle pour le temps de jeu
+    RectangleShape timeBackground(Vector2f(timeText.getLocalBounds().width + 20, timeText.getLocalBounds().height + 30));
+    timeBackground.setFillColor(Color::Black);
     timeBackground.setPosition(timeText.getPosition().x - 10, timeText.getPosition().y - 5);
     m_Window.draw(timeBackground);
 
-    // Draw time text
     m_Window.draw(timeText);
 
-    // Wave display
-    sf::Text waveText;
+    // Numéro de vague de monstre
+    Text waveText;
     waveText.setFont(font);
     waveText.setString("Vague: " + std::to_string(m_NumWave));
     waveText.setCharacterSize(48);
-    waveText.setFillColor(sf::Color::White);
+    waveText.setFillColor(Color::White);
     waveText.setPosition(m_Window.getSize().x - 300, 170);
 
-    // Add black background rectangle for Wave
-    sf::RectangleShape waveBackground(sf::Vector2f(waveText.getLocalBounds().width + 20, waveText.getLocalBounds().height + 30));
-    waveBackground.setFillColor(sf::Color::Black);
+    // Background pour le texte de vague
+    RectangleShape waveBackground(Vector2f(waveText.getLocalBounds().width + 20, waveText.getLocalBounds().height + 30));
+    waveBackground.setFillColor(Color::Black);
     waveBackground.setPosition(waveText.getPosition().x - 10, waveText.getPosition().y - 5);
     m_Window.draw(waveBackground);
     m_Window.draw(waveText);
@@ -491,11 +489,10 @@ void Engine::HandleGameOver() {
     game_over = true;
 }
 
+// Affiche l'écran de gameover
 void Engine::drawGameOver() {
-    // Rub out the last frame
     m_Window.clear(Color::White);
 
-    // Draw the background
     m_Window.draw(m_BackgroundSprite);
 
     // on affiche le Game Over
@@ -510,18 +507,15 @@ void Engine::drawGameOver() {
     m_Window.display();
 }
 
+// Affiche l'écran menu
 void Engine::drawMenuStart() {
-    // Rub out the last frame
     m_Window.clear(Color::White);
 
-    // Draw the background
     m_Window.draw(m_BackgroundSprite);
 
-    // draw le menu
     m_Window.draw(*m_Menu.getSpriteBackground());
     m_Window.draw(*m_Menu.getSpriteButton());
 
-    // Show everything we have just drawn
     m_Window.display();
 }
 
