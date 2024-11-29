@@ -87,7 +87,7 @@ private:
     Bonus m_bonus;
     std::vector<Bonus> bonuses;
     Clock m_BonusClock;
-    Time spawnIntervalBonus = seconds(7.f); // 7 secondes
+    Time spawnIntervalBonus = seconds(10.f); // secondes
 
     // bonus génerate
     BonusFactory m_BonusFactory;
