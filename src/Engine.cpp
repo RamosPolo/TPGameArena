@@ -1,14 +1,13 @@
 #include "Engine.h"
 
 #include "./character/player/Bullet.h"
-#include "Obstacles/Obstacle.h"
 #include "./character/Barvie.h"
 
 #include <cmath>
 #include <sstream>
 
 Engine::Engine() {
-    // Get the screen resolution and create an SFML window and View
+
     Vector2f resolution;
     resolution.x = VideoMode::getDesktopMode().width;
     resolution.y = VideoMode::getDesktopMode().height;
@@ -109,7 +108,6 @@ void Engine::draw()
     // Draw the background
     m_Window.draw(m_BackgroundSprite);
 
-    // draw le joueur
     if (!m_Player.isDestroyed()) {
         m_Window.draw(*m_Player.getSprite());
     }
@@ -131,19 +129,20 @@ void Engine::draw()
 
     DisplayScore();
 
-    // Show everything we have just drawn
     m_Window.display();
 }
 
+// Détection des touches de mouvement du joueur
 void Engine::handlePlayer(Event event){
-    while (m_Window.pollEvent(event)) // Gestion des événements
+
+    // Fermeture de la fenetre
+    while (m_Window.pollEvent(event))
     {
         if (event.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Escape))
         {
             m_Window.close();
         }
     }
-
     if(Mouse::isButtonPressed(Mouse::Left)) {
         if(m_Menu.isButtonClicked(Mouse::getPosition().x, Mouse::getPosition().y)) {
             m_playing = true;
@@ -151,7 +150,6 @@ void Engine::handlePlayer(Event event){
         }
     }
  
-    // Handle the player moving
     if (Keyboard::isKeyPressed(Keyboard::Q))
     {
         m_Player.moveLeft();
@@ -184,6 +182,7 @@ void Engine::handlePlayer(Event event){
     }
 
 }
+
 
 void Engine::handleBullet(){
     if( (Mouse::isButtonPressed(Mouse::Left)

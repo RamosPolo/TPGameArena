@@ -5,12 +5,6 @@
 #include "./character/player/Bullet.h"
 #include "./character/player/Player.h"
 #include "./character/monster/Monster.h"
-
-
-#include "Obstacles/Obstacle.h"
-#include "Obstacles/ObstacleFactory.h"
-#include "WorkingFile/CollisionManager.h"
-
 #include "./character/Barvie.h"
 #include "./character/monster/SpawnerMonster.h"
 #include "Menu/GameOver.h"
@@ -79,9 +73,6 @@ private:
     Barvie b_barvie = Barvie(m_Player);
     void updatePlayer(float dtAsSeconds, int windowWidth, int windowHeight);
     void handlePlayer(Event event);
-
-    // Collisions
-    CollisionManager m_CollisionManager;
     sf::Clock c_damageClock;
 
 
@@ -97,10 +88,6 @@ private:
     std::vector<Bonus> bonuses;
     Clock m_BonusClock;
     Time spawnIntervalBonus = seconds(7.f); // 7 secondes
-
-
-    // les Obstacles
-    ObstacleFactory m_ObstacleFactory;
 
     // bonus génerate
     BonusFactory m_BonusFactory;
@@ -131,8 +118,6 @@ private:
 
     Bullet createBullet(String t, float posJX, float posJY, float posMX, float posMY);
 
-    //void checkEnemyCollisions();
-    //void resolveCollision(Monster &ennemi1, Monster &ennemi2);
  
 public:
     // The Engine constructor
